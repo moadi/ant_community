@@ -5,14 +5,6 @@ Community::Community(Graph& graph)
 	comm = 0;
 
 	n2c.resize(graph.num_vertices, -1);
-
-	in_links.resize(graph.num_vertices, 0);
-
-	in_phm.resize(graph.num_vertices, 0);
-
-	community_neighbors.resize(graph.num_vertices);
-
-	community_degree.resize(graph.num_vertices, 0);
 }
 
 WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalEdges)
@@ -38,8 +30,6 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 			wg.vertex[comm].in_links++;
 			wg.vertex[comm].total += phm;
 
-			in_links[comm]++;
-			in_phm[comm] += phm;
 			comm++;
 		}
 		else if(n2c[a] == n2c[b]) //if they are in the same community
@@ -47,9 +37,6 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 			wg.vertex[n2c[a]].in_links++;
 			wg.vertex[n2c[a]].weight += phm;
 			wg.vertex[n2c[a]].total += phm;
-
-			in_links[n2c[a]]++;
-			in_phm[n2c[a]] += phm;
 		}
 		else if(n2c[a] == -1) //a is not in a cluster but b is, assign a to b's cluster
 		{
@@ -59,8 +46,6 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 			wg.vertex[n2c[b]].total += phm;
 
 			n2c[a] = n2c[b];
-			in_links[n2c[b]]++;
-			in_phm[n2c[b]] += phm;
 		}
 		else if(n2c[b] == -1) //same as above for b
 		{
@@ -70,8 +55,6 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 			wg.vertex[n2c[a]].total += phm;
 
 			n2c[b] = n2c[a];
-			in_links[n2c[a]]++;
-			in_phm[n2c[a]] += phm;
 		}
 		else if (n2c[a] != n2c[b]) //the 2 nodes are in a different community, update crossing edges and pheromone
 		{
@@ -84,13 +67,11 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 			{
 				edge = make_pair(n2c[b], n2c[a]);
 			}
-			out_phm_it = out_phm.find(edge);
-			crossing_edges_it = crossing_edges.find(edge);
 			std::unordered_map<pair<int, int>, int >::iterator it1;
 			std::unordered_map<pair<int, int>, double >::iterator it2;
 			it1 = wg.edges.cross_edges.find(edge);
 			it2 = wg.edges.cross_phm.find(edge);
-			if(out_phm_it == out_phm.end()) //if this pair does not exist in the table ==> first crossing edge
+			if(it1 == wg.edges.cross_edges.end()) //if this pair does not exist in the table ==> first crossing edge
 			{
 				wg.vertex[n2c[a]].degree++;
 				wg.vertex[n2c[b]].degree++;
@@ -100,18 +81,11 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 				wg.vertex[n2c[b]].total += phm;
 				wg.edges.cross_edges.insert(make_pair(edge, 1));
 				wg.edges.cross_phm.insert(make_pair(edge, phm));
-
-				community_degree[n2c[a]]++;
-				community_degree[n2c[b]]++;
-				community_neighbors[n2c[a]].push_back(n2c[b]);
-				community_neighbors[n2c[b]].push_back(n2c[a]);
-				out_phm.insert(make_pair(edge, phm));
-				crossing_edges.insert(make_pair(edge, 1));
 			}
 			else //if the pair exists, then this is another crossing edge
 			{
-				crossing_edges_it->second = crossing_edges_it->second + 1; //increment the number of crossing edges
-				out_phm_it->second = out_phm_it->second + phm; //increment crossing pheromone
+				/*crossing_edges_it->second = crossing_edges_it->second + 1; //increment the number of crossing edges
+				out_phm_it->second = out_phm_it->second + phm; //increment crossing pheromone*/
 
 				wg.vertex[n2c[a]].total += phm;
 				wg.vertex[n2c[b]].total += phm;
@@ -123,7 +97,7 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 	}
 	wg.vertex.resize(comm);
 	wg.num_vertices = comm;
-	in_links.resize(comm); //resize both the vectors to the number of communities found so far
+	/*in_links.resize(comm); //resize both the vectors to the number of communities found so far
 	community_neighbors.resize(comm);
 
 	communities.resize(comm);
@@ -131,11 +105,11 @@ WeightedGraph Community::partition_one_level(Graph& g, std::vector<Edge>& finalE
 	for(unsigned int i = 0; i < n2c.size(); i++)
 	{
 		communities[n2c[i]].push_back(i); //write out all the nodes corresponding to their community
-	}
+	}*/
 	return wg;
 }
 
-void Community::displayPartition()
+/*void Community::displayPartition()
 {
 	for(unsigned int i = 0; i < community_neighbors.size(); i++)
 	{
@@ -168,7 +142,7 @@ void Community::displayPartition()
 		}
 		cout << "\n \n";
 	}
-}
+}*/
 
 /*WeightedGraph Community::partition2graph()
 {
@@ -193,7 +167,7 @@ void Community::displayPartition()
 	return g;
 }*/
 
-double Community::modularity(Graph& g, int tot_m)
+/*double Community::modularity(Graph& g, int tot_m)
 {
 	vector<int> total(comm); //total degree of each community
 	int comm_degree; //degree of a community
@@ -215,5 +189,5 @@ double Community::modularity(Graph& g, int tot_m)
 		q += ( ( (double) in_links[i] / tot_m) - ( ( ( (double) total[i] / (2 * tot_m)) ) * ( ( (double) total[i] / (2 * tot_m)) ) ));
 	}
 	return q;
-}
+}*/
 

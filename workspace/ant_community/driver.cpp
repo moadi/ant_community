@@ -295,9 +295,6 @@ int main(int argc, char **argv)
 
 	Community c(g);
 	WeightedGraph wg = c.partition_one_level(g, finalEdges);
-	//c.displayPartition();
-	//double mod = c.modularity(g, tot_m);
-	//cout << "\n Modularity of partition = " << mod << "\n \n";
 
 	wg.displayGraph();
 	wg.calc_edge_total();
