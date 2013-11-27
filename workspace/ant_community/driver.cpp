@@ -48,7 +48,7 @@ struct less_than_key
 	}
 };
 
-struct less_than_key_2
+struct greater_than_key_2
 {
 	inline bool operator() (const pair<pair<int, int>, double >& p1, const pair<pair<int, int>, double >& p2)
 	{
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
 		fracEdges.push_back(frac_edge);
 	}
 
-	std::sort(fracEdges.begin(), fracEdges.end(), less_than_key_2());
+	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
 
 
 
