@@ -20,7 +20,7 @@ void WeightedGraph::displayGraph()
 	std::unordered_map<pair<int, int>, double >::iterator cross_phm_it;
 	for(unsigned int i = 0; i < num_vertices; i++)
 	{
-		if(vertex[i].id == -1) //if this vertex has been merge, ignore
+		if(vertex[i].id == -1) //if this vertex has been merged, ignore
 					continue;
 
 		cout << "Original graph members of vertex " << i << " : \n";
@@ -31,7 +31,7 @@ void WeightedGraph::displayGraph()
 
 		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
 		{
-			cout << vertex[i].origNodes[j] + 1 << "  ";
+			cout << vertex[i].origNodes[j] << "  ";
 		}
 		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << " ]   ";
 		cout << "Degree of vertex = " << vertex[i].degree << "\n";
@@ -198,11 +198,6 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 
 			//increment the degree of node1
 			++vertex[node1].degree;
-
-			//TEST!!!!
-			//--vertex[*it].degree;
-
-
 		}
 		else //if the edge with node1 exists
 		{
@@ -228,26 +223,6 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 			//++vertex[node1].degree; (WRONG!)
 		}
 	} //Done updating the graph
-
-	/*
-	//update in_links for node1 (crossing edges + in_links of node2)
-	vertex[node1].in_links += n1_n2_edge_it->second + vertex[node2].in_links;
-
-	//update the weight and total of node1
-	vertex[node1].weight += vertex[node2].weight + n1_n2_phm_it->second;
-	vertex[node1].total += vertex[node2].weight; //since the outgoing phm is already counted
-
-	//add the original nodes of node2 into node1
-	vertex[node1].origNodes.insert(vertex[node1].origNodes.end(),
-									vertex[node2].origNodes.begin(),
-									vertex[node2].origNodes.end());
-
-	//remove edge(node1,node2) from both maps
-	edges.cross_edges.erase(n1_n2);
-	edges.cross_phm.erase(n1_n2);
-
-	//invalidate this vertex (NEEDS TO BE CHANGED LATER)
-	vertex[node2].id = -1;*/
 }
 
 void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& fracEdges)

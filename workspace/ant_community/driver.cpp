@@ -240,22 +240,25 @@ int main(int argc, char **argv)
 
 	//create the ants and place them on the graph
 	Ant * ants = new Ant[g.num_vertices];
-	int tot_deg = 0;
 	for(int i = 0; i < g.num_vertices; i++)
 	{
 		ants[i].location = g.vertex[i];
-		tot_deg += g.vertex[i].degree;
 	}
 
-	cout<<"The total number of edges is = "<<tot_deg/2<<"\n\n";
-
-	int tot_m = tot_deg / 2;
+	cout<<"The total number of edges is = "<<g.num_edges<<"\n\n";
 
 	cout<<"The number of vertices is = "<<g.num_vertices<<"\n\n";
 
-	maxSteps = (int) ((2.0/3.0) * g.num_vertices);
-
-	updatePeriod = maxSteps / 3;
+	if(g.num_vertices > 113)
+	{
+		maxSteps = 75;
+		updatePeriod = maxSteps / 3;
+	}
+	else
+	{
+		maxSteps = (int) ((2.0/3.0) * g.num_vertices);
+		updatePeriod = maxSteps / 3;
+	}
 
 	Helper helper(g);
 
@@ -284,19 +287,19 @@ int main(int argc, char **argv)
 
 	std::sort(finalEdges.begin(), finalEdges.end(), greater_than_key());
 
-	for(auto it = finalEdges.begin(); it != finalEdges.end(); it++)
+	/*for(auto it = finalEdges.begin(); it != finalEdges.end(); it++)
 	{
 		int a = it->v1;
 		int b = it->v2;
 		cout << "(" << ++a << "," << ++b << ")" << setw(10) << "	:	" << setw(5) << it->phm << "\n";
-	}
+	}*/
 	delete[] ants; //remove the ants
 	cout << "\n";
 
 	Community c(g);
 	WeightedGraph wg = c.partition_one_level(g, finalEdges);
 
-	wg.displayGraph();
+	//wg.displayGraph();
 	wg.calc_edge_total();
 
 	std::vector<pair<pair<int, int>, double > > fracEdges;
@@ -317,10 +320,10 @@ int main(int argc, char **argv)
 
 	cout << "Graph Modularity = " << wg.modularity(g) << "\n\n";
 
-	for(auto it = fracEdges.begin(); it != fracEdges.end(); it++)
+	/*for(auto it = fracEdges.begin(); it != fracEdges.end(); it++)
 	{
 		cout << "(" << it->first.first << ", " << it->first.second << ") - " <<it->second << "\n";
-	}
+	}*/
 
 	wg.mergeClusters(fracEdges);
 
