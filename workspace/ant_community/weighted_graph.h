@@ -2,6 +2,7 @@
 #include <utility>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 
 #include "graph.h"
 

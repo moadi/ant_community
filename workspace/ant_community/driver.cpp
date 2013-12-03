@@ -30,7 +30,7 @@ double eta = 0.5;
 double maxPhm = 10000.0;
 double minPhm = 1;
 
-void calcNeighborhoodSize(Graph*);
+void calcNeighborhoodSize(Graph*); //function to calculate intersection size for each vertex with it's neighbors
 
 struct greater_than_key
 {
@@ -145,7 +145,6 @@ void updatePheromone(Graph * g)
  * the ants on the graph
  * in parallel.
  */
-
 void antsMove(Ant * ants, Graph * g, Helper &helper)
 {
 	bool moved;
@@ -249,6 +248,7 @@ int main(int argc, char **argv)
 
 	cout<<"The number of vertices is = "<<g.num_vertices<<"\n\n";
 
+	//set the number of iterations of function antsMove, depending on graph size
 	if(g.num_vertices > 113)
 	{
 		maxSteps = 75;
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 		antsMove(ants, &g, helper);
 		resetAnts(ants, &g, helper);
 		eta = eta * 0.95;
-		if (eta < 0.02)
+		if (eta < 0.02) //we don't want the evaporation factor to get too small
 		{
 			eta = 0.02;
 		}
@@ -293,6 +293,7 @@ int main(int argc, char **argv)
 		int b = it->v2;
 		cout << "(" << ++a << "," << ++b << ")" << setw(10) << "	:	" << setw(5) << it->phm << "\n";
 	}*/
+
 	delete[] ants; //remove the ants
 	cout << "\n";
 
@@ -318,7 +319,7 @@ int main(int argc, char **argv)
 
 
 
-	cout << "Graph Modularity = " << wg.modularity(g) << "\n\n";
+	cout << "Modularity of initial partition = " << wg.modularity(g) << "\n\n";
 
 	/*for(auto it = fracEdges.begin(); it != fracEdges.end(); it++)
 	{
@@ -331,8 +332,7 @@ int main(int argc, char **argv)
 
 	wg.displayGraph();
 
-	cout << wg.modularity(g) << "\n\n";
-
+	cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
 
 	return 0;
 }

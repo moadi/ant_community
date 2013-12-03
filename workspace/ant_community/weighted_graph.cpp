@@ -18,6 +18,7 @@ void WeightedGraph::displayGraph()
 {
 	std::unordered_map<pair<int, int>, int >::iterator cross_edges_it;
 	std::unordered_map<pair<int, int>, double >::iterator cross_phm_it;
+	ofstream fout("output.dat");
 	for(unsigned int i = 0; i < num_vertices; i++)
 	{
 		if(vertex[i].id == -1) //if this vertex has been merged, ignore
@@ -31,9 +32,11 @@ void WeightedGraph::displayGraph()
 
 		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
 		{
-			cout << vertex[i].origNodes[j] << "  ";
+			cout << vertex[i].origNodes[j] + 1  << "  ";
+			fout << vertex[i].origNodes[j] + 1 << " ";
 		}
-		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << " ]   ";
+		fout << "\n";
+		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << ", " << vertex[i].total << " ]  ";
 		cout << "Degree of vertex = " << vertex[i].degree << "\n";
 		cout << "Vertex is connected to clusters with phm: \n";
 		pair<int, int> edge;
@@ -57,6 +60,8 @@ void WeightedGraph::displayGraph()
 		cout << "\n \n";
 	}
 	cout << "Number of edges = " << edges.cross_edges.size() << "\n\n";
+
+	fout.close();
 }
 
 void WeightedGraph::calc_edge_total()

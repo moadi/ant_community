@@ -1,13 +1,4 @@
-/*
- * tabulist.h
- *
- *  Created on: Jun 25, 2013
- *      Author: muddy
- */
-
 #include <iostream>
-
-#define LIST_SIZE 2
 
 #ifndef TABULIST_H_
 #define TABULIST_H_
@@ -19,6 +10,7 @@ class TabuList
 		int head;
 
 	public:
+		static const int LIST_SIZE = 2;
 		TabuList();
 		void addToList(int);
 		bool searchList(int);
