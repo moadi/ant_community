@@ -1,7 +1,8 @@
-#include <random>
-
 #ifndef HELPER_H_
 #define HELPER_H_
+
+#include <random>
+
 
 class Helper
 {

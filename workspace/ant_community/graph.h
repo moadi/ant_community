@@ -1,9 +1,6 @@
-/*
- * graph.h
- *
- *  Created on: Jun 20, 2013
- *      Author: muddy
- */
+#ifndef GRAPH_H_
+#define GRAPH_H_
+
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
@@ -15,9 +12,6 @@
 
 using namespace std;
 
-
-#ifndef GRAPH_H_
-#define GRAPH_H_
 
 /*
  * Specialize std::hash for pair so we can use it as a key

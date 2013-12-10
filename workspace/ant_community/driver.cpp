@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 	start = clock();
 
 	//exploration of the graph is done by the ants
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 75; i++)
 	{
 		antsMove(ants, &g, helper);
 		resetAnts(ants, &g, helper);
@@ -301,11 +301,11 @@ int main(int argc, char **argv)
 	WeightedGraph wg = c.partition_one_level(g, finalEdges);
 
 	//wg.displayGraph();
-	wg.calc_edge_total();
+	//wg.calc_edge_total();
 
-	std::vector<pair<pair<int, int>, double > > fracEdges;
+	/*std::vector<pair<pair<int, int>, double > > fracEdges;
 
-	//fracEdges.resize(wg.edgeTotal.size());
+	fracEdges.resize(wg.edgeTotal.size());
 
 	for(auto it = wg.edgeTotal.begin(); it != wg.edgeTotal.end(); it++)
 	{
@@ -315,24 +315,53 @@ int main(int argc, char **argv)
 		fracEdges.push_back(frac_edge);
 	}
 
-	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
-
-
+	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());*/
 
 	cout << "Modularity of initial partition = " << wg.modularity(g) << "\n\n";
 
-	/*for(auto it = fracEdges.begin(); it != fracEdges.end(); it++)
-	{
-		cout << "(" << it->first.first << ", " << it->first.second << ") - " <<it->second << "\n";
-	}*/
+	c.sort_out_degrees();
 
-	wg.mergeClusters(fracEdges);
+	//c.displayOutdegree(g);
+
+	c.reassign_communities();
+
+	WeightedGraph new_wg = c.rebuild_graph(finalEdges);
 
 	cout <<"\n\n";
 
-	wg.displayGraph();
+	//new_wg.displayGraph();
 
-	cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
+	new_wg.calc_edge_total();
+
+	std::vector<pair<pair<int, int>, double > > fracEdges;
+
+	fracEdges.resize(new_wg.edgeTotal.size());
+
+	for(auto it = new_wg.edgeTotal.begin(); it != new_wg.edgeTotal.end(); it++)
+	{
+		pair<int, int> edge = it->first;
+		double frac = it->second;
+		pair<pair<int, int>, double > frac_edge(edge, frac);
+		fracEdges.push_back(frac_edge);
+	}
+
+	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
+
+	cout << "Modularity of new partition = " << new_wg.modularity(g) << "\n\n";
+
+	//wg.mergeClusters(fracEdges);
+
+	new_wg.mergeClusters(fracEdges);
+
+	new_wg.displayGraph();
+
+	cout <<"\n\n";
+
+	//wg.displayGraph();
+
+	//cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
+
+	cout << "Modularity of final partition = " << new_wg.modularity(g) << "\n\n";
 
 	return 0;
 }

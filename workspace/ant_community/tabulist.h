@@ -1,7 +1,7 @@
-#include <iostream>
-
 #ifndef TABULIST_H_
 #define TABULIST_H_
+
+#include <iostream>
 
 class TabuList
 {

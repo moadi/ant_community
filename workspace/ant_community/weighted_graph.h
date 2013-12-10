@@ -1,3 +1,6 @@
+#ifndef WEIGHTED_GRAPH_H_
+#define WEIGHTED_GRAPH_H_
+
 #include <vector>
 #include <utility>
 #include <algorithm>
@@ -7,9 +10,6 @@
 #include "graph.h"
 
 using namespace std;
-
-#ifndef WEIGHTED_GRAPH_H_
-#define WEIGHTED_GRAPH_H_
 
 class WeightedVertex
 {

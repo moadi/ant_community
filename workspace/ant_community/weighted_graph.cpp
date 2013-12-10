@@ -18,10 +18,10 @@ void WeightedGraph::displayGraph()
 {
 	std::unordered_map<pair<int, int>, int >::iterator cross_edges_it;
 	std::unordered_map<pair<int, int>, double >::iterator cross_phm_it;
-	ofstream fout("output.dat");
-	for(unsigned int i = 0; i < num_vertices; i++)
+	ofstream fout("/home/mua193/Desktop/NMI/output.dat");
+	for(int i = 0; i < num_vertices; i++)
 	{
-		if(vertex[i].id == -1) //if this vertex has been merged, ignore
+		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0)) //if this vertex has been merged, ignore
 					continue;
 
 		cout << "Original graph members of vertex " << i << " : \n";
@@ -32,7 +32,7 @@ void WeightedGraph::displayGraph()
 
 		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
 		{
-			cout << vertex[i].origNodes[j] + 1  << "  ";
+			cout << vertex[i].origNodes[j] + 1   << " ";
 			fout << vertex[i].origNodes[j] + 1 << " ";
 		}
 		fout << "\n";
@@ -73,6 +73,8 @@ void WeightedGraph::calc_edge_total()
 	double frac;
 	for(int i = 0; i < num_vertices; i++)
 	{
+		if(vertex[i].origNodes.size() == 0)
+			continue;
 		for(unsigned int j = 0; j < vertex[i].neighbors.size(); j++)
 		{
 			if(i < vertex[i].neighbors[j])
@@ -142,7 +144,7 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 	edges.cross_phm.erase(n1_n2);
 
 	//invalidate this vertex (NEEDS TO BE CHANGED LATER)
-	vertex[node2].id = -1;
+	vertex[node2].id = node1;
 
 	//iterate over the neighbors of node2 to update the graph
 	for(auto it = vertex[node2].neighbors.begin(); it != vertex[node2].neighbors.end(); it++)
@@ -234,7 +236,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 {
 	for(auto it = fracEdges.begin(); it != fracEdges.end(); it++) //iterate over the sorted edges
 	{
-		if(it->second <= 0.1)
+		if(it->second <= 0.05)
 			continue;
 
 		pair<int, int> edge = it->first;
@@ -248,14 +250,24 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 		int node2 = it->first.second;
 
 		//if any node has already been merged with another then skip
-		if(vertex[node1].id == -1 || vertex[node2].id == -1)
-			continue;
+		/*if(vertex[node1].id == -1 || vertex[node2].id == -1)
+			continue;*/
+
+		if(vertex[node1].id != node1)
+		{
+			node1 = vertex[node1].id;
+		}
+		else if(vertex[node2].id != node2)
+		{
+			node2 = vertex[node2].id;
+		}
 
 		double node1_frac, node2_frac; //the weight of each node is calculated (normalized)
 		node1_frac = vertex[node1].weight / vertex[node1].total;
 		node2_frac = vertex[node2].weight / vertex[node2].total;
 
-		if((edge_it->second / vertex[node1].total) > 0.5)
+		//CHANGE HERE, SEE IT LATER!!
+		if((edge_it->second / vertex[node1].total) > (vertex[node1].weight / vertex[node1].total))
 		{
 			//if node1 has more elements
 			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
@@ -269,7 +281,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 
 		}
 
-		else if((edge_it->second / vertex[node2].total) > 0.5)
+		else if((edge_it->second / vertex[node2].total) > (vertex[node1].weight / vertex[node1].total)) //if the pheromone along this edge is high
 		{
 			//if node1 has more elements
 			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
@@ -317,7 +329,7 @@ double WeightedGraph::modularity(Graph& g)
 	int tot_deg;
 	for(int i = 0; i < num_vertices; i++)
 	{
-		if(vertex[i].id == -1)
+		if(vertex[i].id != i || vertex[i].origNodes.size() == 0)
 			continue;
 
 		tot_deg = 0;
