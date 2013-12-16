@@ -64,6 +64,11 @@ int count_vertices_pajek(ifstream &fin)
 Graph::Graph(char * fileName)
 {
 	ifstream fin(fileName);
+	if(!fin)
+	{
+		cerr << "Invalid file name! \n";
+		exit(EXIT_FAILURE);
+	}
 	string file(fileName);
 	if (string::npos != file.find(".net"))
 	{

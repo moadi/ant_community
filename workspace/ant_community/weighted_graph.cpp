@@ -21,7 +21,8 @@ void WeightedGraph::displayGraph()
 	ofstream fout("/home/mua193/Desktop/NMI/output.dat");
 	for(int i = 0; i < num_vertices; i++)
 	{
-		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0)) //if this vertex has been merged, ignore
+		//if this cluster has been merged or all it's members reassigned , ignore
+		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0))
 					continue;
 
 		cout << "Original graph members of vertex " << i << " : \n";

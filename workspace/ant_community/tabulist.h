@@ -10,7 +10,7 @@ class TabuList
 		int head;
 
 	public:
-		static const int LIST_SIZE = 2;
+		static const int LIST_SIZE = 3;
 		TabuList();
 		void addToList(int);
 		bool searchList(int);
@@ -18,5 +18,6 @@ class TabuList
 		void clearList();
 		//~TabuList();
 };
+
 
 #endif /* TABULIST_H_ */

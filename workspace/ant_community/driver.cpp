@@ -29,6 +29,8 @@ int updatePeriod;
 double eta = 0.5;
 double maxPhm = 10000.0;
 double minPhm = 1;
+char * outputFile = NULL;
+char * inputFile = NULL;
 
 void calcNeighborhoodSize(Graph*); //function to calculate intersection size for each vertex with it's neighbors
 
@@ -55,6 +57,7 @@ struct greater_than_key_2
 		return p1.second > p2.second;
 	}
 };
+
 
 /* Function to reset the position of the ants
  * after each iteration is complete
@@ -141,6 +144,44 @@ void updatePheromone(Graph * g)
 	}
 }
 
+void write_partition(char * output_file, WeightedGraph& wg, Graph& g)
+{
+	ofstream fout;
+	if(outputFile == NULL)
+	{
+		string output(inputFile);
+		size_t pos = output.find(".");
+		if(pos != std::string::npos)
+		{
+			output[pos+1] = 'c';
+			output[pos+2] = 'l';
+			output[pos+3] = 'u';
+			fout.open(output.c_str());
+		}
+	}
+	else
+		fout.open(output_file);
+
+	std::vector<int> n2c(g.num_vertices);
+
+	for(int i = 0; i < wg.num_vertices; i++)
+	{
+		if(wg.vertex[i].id == -1 || wg.vertex[i].origNodes.size() == 0)
+			continue;
+		for(int j = 0; j < wg.vertex[i].origNodes.size(); j++)
+		{
+			n2c[wg.vertex[i].origNodes[j]] = i+1;
+		}
+	}
+	fout << "*Vertices " << g.num_vertices << "\n";
+	for(auto it = n2c.begin(); it != n2c.end(); it++)
+	{
+		fout << *it << "\n";
+	}
+	fout.close();
+}
+
+
 /*Function which moves all
  * the ants on the graph
  * in parallel.
@@ -151,19 +192,19 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 	typename unordered_map<pair<int, int>, Edge>::iterator edge_it;
 	pair<int, int> edge;
 
-	for(int j=1; j <= maxSteps; j++)
+	for(int j = 1; j <= maxSteps; j++)
 	{
 		{
 			updatePheromone(g);
 		}
 		//for all ants update their positions if possible
-		for(int i=0; i < g->num_vertices; i++)
+		for(int i = 0; i < g->num_vertices; i++)
 		{
 			int cur_vertex = ants[i].location.id;
 			ants[i].tabulist.addToList(cur_vertex);
 			int numTries = 0;
 			moved = false;
-			while(numTries < 5 && !moved)
+			while(numTries < 3 && !moved)
 			{
 				int next_vertex = chooseNext(&ants[i], g, helper);
 
@@ -203,24 +244,67 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 	}
 }
 
+void usage(char * progName, string errorMsg)
+{
+	cerr << errorMsg << "\n";
+	cerr << "usage: " << progName << " inputFile [options] \n";
+	cerr << "inputFile: the graph whose community structure is to be found \n";
+	cerr << "-o : specify the output file to write the clustering to, extension should be .clu so the clusters can be visualized in Pajek \n";
+	exit(EXIT_FAILURE);
+}
+
+
+/*
+ * Function to parse the arguments
+ * passed to the program
+ */
+void parse_args(int argc, char** argv)
+{
+	if(argc < 2)
+	{
+		usage(argv[0], "Too few arguments");
+	}
+
+	for(int i = 1; i < argc; i++)
+	{
+		if(argv[i][0] == '-')
+		{
+			switch(argv[i][1])
+			{
+				case 'o':
+					outputFile = argv[i+1];
+					i++;
+					break;
+				default:
+					usage(argv[0], "Incorrect options");
+					break;
+			}
+		}
+		else
+		{
+			if(inputFile == NULL)
+			{
+				inputFile = argv[i];
+				cout << "Input file : " << inputFile << "\n\n";
+			}
+			else
+				usage(argv[0], "Multiple input files");
+		}
+	}
+}
+
 int main(int argc, char **argv)
 {
-	cout<<"Argument is: "<<argv[1]<<"\n\n";
-
 	clock_t start; //calculates time for iteration
+
+	parse_args(argc, argv);
 
 	start = clock();
 
-	if(argc != 2)
-	{
-		cout << "Invalid parameters! \n";
-		return 0;
-	}
-
 	//read in the graph, given as a command line parameter
-	Graph g(argv[1]);
+	Graph g(inputFile);
 
-	cout<<"Time for reading graph = "<<(clock() - start)/ (double)(CLOCKS_PER_SEC/1000)<<" ms \n\n";
+	cout<<"Time for reading graph = " << (clock() - start)/ (double)(CLOCKS_PER_SEC/1000)<<" ms \n\n";
 
 	start = clock();
 
@@ -228,14 +312,14 @@ int main(int argc, char **argv)
 
 	//sort the adjacent nodes for each vertex to compute intersection easily
 	for(int i=0; i<g.num_vertices; i++)
-		sort(g.vertex[i].neighbors, g.vertex[i].neighbors+g.vertex[i].degree);
+		std::sort(g.vertex[i].neighbors, g.vertex[i].neighbors+g.vertex[i].degree);
 
 	//calculate the intersection size of each node with its neighbor
 	calcNeighborhoodSize(&g);
 
-	cout<<"Completed...\n\n";
+	cout << "Completed...\n\n";
 
-	cout<<"Time for finalizing neighborhood = "<<(clock() - start)/ (double)(CLOCKS_PER_SEC/1000)<<" ms \n\n";
+	cout << "Time for finalizing neighborhood = "<< (clock() - start)/ (double)(CLOCKS_PER_SEC/1000) << " ms \n\n";
 
 	//create the ants and place them on the graph
 	Ant * ants = new Ant[g.num_vertices];
@@ -362,6 +446,8 @@ int main(int argc, char **argv)
 	//cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
 
 	cout << "Modularity of final partition = " << new_wg.modularity(g) << "\n\n";
+
+	//write_partition(outputFile, new_wg, g);
 
 	return 0;
 }
