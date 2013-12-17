@@ -194,6 +194,7 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 
 	for(int j = 1; j <= maxSteps; j++)
 	{
+		if(j % updatePeriod == 0)
 		{
 			updatePheromone(g);
 		}
@@ -204,7 +205,7 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 			ants[i].tabulist.addToList(cur_vertex);
 			int numTries = 0;
 			moved = false;
-			while(numTries < 3 && !moved)
+			while(numTries < 2 && !moved)
 			{
 				int next_vertex = chooseNext(&ants[i], g, helper);
 
@@ -243,6 +244,10 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 		}
 	}
 }
+
+/*
+ * Display program usage information
+ */
 
 void usage(char * progName, string errorMsg)
 {

@@ -25,7 +25,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1824657069" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1022439885" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.2116594964" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.149988806" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x -fno-stack-protector" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.149988806" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.126795858" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
 								</option>
@@ -113,10 +113,10 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1551495456;cdt.managedbuild.config.gnu.exe.release.1551495456.;cdt.managedbuild.tool.gnu.c.compiler.exe.release.1285098549;cdt.managedbuild.tool.gnu.c.compiler.input.1692664797">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.2065923246;cdt.managedbuild.config.gnu.exe.debug.2065923246.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1824657069;cdt.managedbuild.tool.gnu.cpp.compiler.input.1300414736">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1551495456;cdt.managedbuild.config.gnu.exe.release.1551495456.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1285253967;cdt.managedbuild.tool.gnu.cpp.compiler.input.1681953995">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1551495456;cdt.managedbuild.config.gnu.exe.release.1551495456.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1285253967;cdt.managedbuild.tool.gnu.cpp.compiler.input.1681953995">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.2065923246;cdt.managedbuild.config.gnu.exe.debug.2065923246.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1824657069;cdt.managedbuild.tool.gnu.cpp.compiler.input.1300414736">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.2065923246;cdt.managedbuild.config.gnu.exe.debug.2065923246.;cdt.managedbuild.tool.gnu.c.compiler.exe.debug.727864;cdt.managedbuild.tool.gnu.c.compiler.input.1584859737">

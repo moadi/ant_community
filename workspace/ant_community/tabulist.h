@@ -10,7 +10,7 @@ class TabuList
 		int head;
 
 	public:
-		static const int LIST_SIZE = 3;
+		static const int LIST_SIZE = 2;
 		TabuList();
 		void addToList(int);
 		bool searchList(int);
