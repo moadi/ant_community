@@ -1,0 +1,21 @@
+\begin{figure}
+\label{fig3}
+\hrule
+\BlankLine
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\reset{$G, A$} \;
+	\Begin {
+		\ForEach{$a \in A$}{
+		\If{$Random(0, 1) < 0.5$}{
+			$a.location \leftarrow Random(0, |V| - 1)$ \;
+			}
+		$a.tabuList \leftarrow \varnothing$ \;
+		}
+	}
+\end{algorithm}
+\BlankLine
+\hrule
+\caption{Reset ants}
+\end{figure}

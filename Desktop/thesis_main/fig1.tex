@@ -1,0 +1,63 @@
+\SetKwInput{Input}{Input}
+\SetKwFunction{antcommunity}{AntCommunity}
+\SetKwInput{Output}{Output}
+\SetKwFunction{initants}{InitAnts}
+\SetKwFunction{antsmove}{AntsMove}
+\SetKwFunction{firstpart}{PartitionOneLevel}
+\SetKwFunction{reset}{ResetAnts}
+\SetKwFunction{reassign}{ReassignClusters}
+
+\begin{figure}
+\label{fig1}
+\hrule
+\BlankLine
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\antcommunity{$G$} \;
+	\Input{$G=(V,E)$, graph whose community structure is to be found }
+	\Output{Set of $k$ communities $C = \{C_1, \ldots, C_k\}$}
+	\Begin{
+		//Initialization \;
+		$i \leftarrow 1$ \;
+		\ForEach{$v \in V$}{
+			Calculate the number of common nodes with all neighbors \;
+		}
+		Create the set of ants $A$, of size $|V|$ \;
+		\initants{$G, A$}\;
+		\BlankLine
+		//Exploration phase \;
+		\While{$i < i_{max}$}{
+			\antsmove{$G, A$} \; 
+			Update phermone evaporation factor $\eta$ \;
+			\reset{$G, A$} \;
+			$i \leftarrow i + 1$ \;
+		}
+		\BlankLine		
+		//Construction phase \;
+		Sort $E$ in decreasing order of pheromone \;
+		\firstpart{$G$} \;
+		\reassign{} \;
+	}
+
+\end{algorithm}
+\BlankLine
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\DontPrintSemicolon
+	\initants{G, A} \;
+	\Begin {
+		\For{$i=0; i < |V|; i++$}{
+			$A[i].location \leftarrow V[i]$ \;
+			$A[i].tabuList \leftarrow \varnothing$ \;
+		}
+		\ForEach{$e \in E$}{
+			$e.initPhm = 1$ \;
+			$e.nVisited = 0$ \;
+		}
+	}
+\end{algorithm}
+\BlankLine
+\hrule
+\caption{Ant-Based Community Detection Algorithm}
+\end{figure}

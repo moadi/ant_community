@@ -1,0 +1,26 @@
+\contentsline {chapter}{List of Figures}{vi}
+\contentsline {chapter}{List of Tables}{vii}
+\contentsline {chapter}{Acknowledgements}{viii}
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Preliminaries}{3}
+\contentsline {section}{\numberline {2.1}Problem Definition}{3}
+\contentsline {section}{\numberline {2.2}Previous Work}{4}
+\contentsline {subsection}{\numberline {2.2.1}Hierarchical Methods}{5}
+\contentsline {subsection}{\numberline {2.2.2}Modularity-based Methods}{5}
+\contentsline {subsection}{\numberline {2.2.3}Other Methods}{6}
+\contentsline {section}{\numberline {2.3}Ant Algorithms}{7}
+\contentsline {chapter}{\numberline {3}Ant-Based Community Detection}{10}
+\contentsline {section}{\numberline {3.1}Overview}{10}
+\contentsline {section}{\numberline {3.2}Initialization}{11}
+\contentsline {section}{\numberline {3.3}Exploration}{11}
+\contentsline {section}{\numberline {3.4}Construction}{15}
+\contentsline {section}{\numberline {3.5}Optimization Phase}{17}
+\contentsline {section}{\numberline {3.6}Parameters}{18}
+\contentsline {chapter}{\numberline {4}Testing Algorithms}{19}
+\contentsline {section}{\numberline {4.1}Synthetic Graphs}{19}
+\contentsline {subsection}{\numberline {4.1.1}Girvan-Newman Benchmark}{19}
+\contentsline {subsection}{\numberline {4.1.2}LFR Benchmark}{20}
+\contentsline {section}{\numberline {4.2}Partition Evaluation}{21}
+\contentsline {subsection}{\numberline {4.2.1}Normalized Mutual Information}{21}
+\contentsline {subsection}{\numberline {4.2.2}Modularity}{21}
+\contentsline {chapter}{References}{23}

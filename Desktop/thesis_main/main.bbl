@@ -1,0 +1,235 @@
+\begin{thebibliography}{10}
+
+\bibitem{Barabasi99emergenceScaling}
+Albert-Laszlo Barabasi and Reka Albert.
+\newblock Emergence of scaling in random networks.
+\newblock {\em Science}, 286(5439):509--512, 1999.
+
+\bibitem{blondel2008fuc}
+V.D. Blondel, J.L. Guillaume, R.~Lambiotte, and E.L.J.S. Mech.
+\newblock {Fast unfolding of communities in large networks}.
+\newblock {\em J. Stat. Mech}, page P10008, 2008.
+
+\bibitem{10.1109/TKDE.2007.190689}
+Ulrik Brandes, Daniel Delling, Marco Gaertler, Robert G?rke, Martin Hoefer,
+  Zoran Nikoloski, and Dorothea Wagner.
+\newblock On modularity clustering.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  20(2):172--188, 2008.
+
+\bibitem{5910378}
+T.N. Bui, Xianghua Deng, and C.M. Zrncic.
+\newblock An improved ant-based algorithm for the degree-constrained minimum
+  spanning tree problem.
+\newblock {\em Evolutionary Computation, IEEE Transactions on}, 16(2):266--278,
+  2012.
+
+\bibitem{Clauset2004}
+Aaron Clauset, M.~E.~J. Newman, , and Cristopher Moore.
+\newblock Finding community structure in very large networks.
+\newblock {\em Physical Review E}, pages 1-- 6, 2004.
+
+\bibitem{RSA:RSA1001}
+Anne Condon and Richard~M. Karp.
+\newblock Algorithms for graph partitioning on the planted partition model.
+\newblock {\em Random Structures \& Algorithms}, 18(2):116--140, 2001.
+
+\bibitem{Danon05comparingcommunity}
+Leon Danon, Albert Díaz-guilera, and Jordi Duch.
+\newblock Comparing community structure identification.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment}, page
+  09008, 2005.
+
+\bibitem{585892}
+M.~Dorigo and L.M. Gambardella.
+\newblock Ant colony system: a cooperative learning approach to the traveling
+  salesman problem.
+\newblock {\em Evolutionary Computation, IEEE Transactions on}, 1(1):53--66,
+  1997.
+
+\bibitem{dorigo1992}
+Marco Dorigo.
+\newblock {\em Optimization, Learning and Natural Algorithms}.
+\newblock PhD thesis, Politecnico di Milano, Italy, 1992.
+
+\bibitem{duch-2005-72}
+J.~Duch and A.~Arenas.
+\newblock Community detection in complex networks using extremal optimization.
+\newblock {\em Physical Review E}, 72:027104, 2005.
+
+\bibitem{Fortunato201075}
+Santo Fortunato.
+\newblock Community detection in graphs.
+\newblock {\em Physics Reports}, 486(3–5):75 -- 174, 2010.
+
+\bibitem{Fortunato02012007}
+Santo Fortunato and Marc Barthélemy.
+\newblock Resolution limit in community detection.
+\newblock {\em Proceedings of the National Academy of Sciences}, 104(1):36--41,
+  2007.
+
+\bibitem{Girvan11062002}
+M.~Girvan and M.~E.~J. Newman.
+\newblock Community structure in social and biological networks.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  99(12):7821--7826, 2002.
+
+\bibitem{PhysRevE.81.046106}
+Benjamin~H. Good, Yves-Alexandre de~Montjoye, and Aaron Clauset.
+\newblock Performance of modularity maximization in practical contexts.
+\newblock {\em Phys. Rev. E}, 81:046106, Apr 2010.
+
+\bibitem{Guimera04simulatedAnnealingNetworks}
+Roger Guimera and Luis A.~Nunes Amaral.
+\newblock {\em Nature}.
+
+\bibitem{DBLP:journals/corr/abs-1303-4711}
+Dongxiao He, Jie Liu, Bo~Yang, Yuxiao Huang, Dayou Liu, and Di~Jin.
+\newblock An ant-based algorithm with local optimization for community
+  detection in large-scale networks.
+\newblock {\em CoRR}, abs/1303.4711, 2013.
+
+\bibitem{Jin:2011:ACO:2022850.2022861}
+Di~Jin, Dayou Liu, Bo~Yang, Carlos Baquero, and Dongxiao He.
+\newblock Ant colony optimization with markov random walk for community
+  detection in graphs.
+\newblock In {\em Proceedings of the 15th Pacific-Asia Conference on Advances
+  in Knowledge Discovery and Data Mining - Volume Part II}, PAKDD'11, pages
+  123--134, Berlin, Heidelberg, 2011. Springer-Verlag.
+
+\bibitem{PhysRevE.78.046110}
+Andrea Lancichinetti, Santo Fortunato, and Filippo Radicchi.
+\newblock Benchmark graphs for testing community detection algorithms.
+\newblock {\em Phys. Rev. E}, 78:046110, Oct 2008.
+
+\bibitem{PhysRevE.71.046101}
+Claire~P. Massen and Jonathan P.~K. Doye.
+\newblock Identifying communities within energy landscapes.
+\newblock {\em Phys. Rev. E}, 71:046101, Apr 2005.
+
+\bibitem{milgram67smallworld}
+Stanley Milgram.
+\newblock {The Small World Problem}.
+\newblock {\em Psychology Today}, 2:60--67, 1967.
+
+\bibitem{Newman06062006}
+M.~E.~J. Newman.
+\newblock Modularity and community structure in networks.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  103(23):8577--8582, 2006.
+
+\bibitem{PhysRevE.69.026113}
+M.~E.~J. Newman and M.~Girvan.
+\newblock Finding and evaluating community structure in networks.
+\newblock {\em Phys. Rev. E}, 69(2):026113, February 2004.
+
+\bibitem{newman03fast}
+M.E.J. Newman.
+\newblock Fast algorithm for detecting community structure in networks.
+\newblock {\em Physical Review E}, 69, September 2003.
+
+\bibitem{6045331}
+C.~Pizzuti.
+\newblock A multiobjective genetic algorithm to find communities in complex
+  networks.
+\newblock {\em Evolutionary Computation, IEEE Transactions on}, 16(3):418--430,
+  2012.
+
+\bibitem{2008ppsnpizzuti}
+Clara Pizzuti.
+\newblock Ga-net: A genetic algorithm for community detection in social
+  networks.
+\newblock In Günter Rudolph, Thomas Jansen, Simon Lucas, Carlo Poloni, and
+  Nicola Beume, editors, {\em Parallel Problem Solving from Nature – PPSN X},
+  volume 5199 of {\em Lecture Notes in Computer Science}, pages 1081--1090.
+  Springer Berlin Heidelberg, 2008.
+
+\bibitem{Pizzuti:2012:BDM:2245276.2245321}
+Clara Pizzuti.
+\newblock Boosting the detection of modular community structure with genetic
+  algorithms and local search.
+\newblock In {\em Proceedings of the 27th Annual ACM Symposium on Applied
+  Computing}, SAC '12, pages 226--231, New York, NY, USA, 2012. ACM.
+
+\bibitem{ponslatapy05}
+Pascal Pons and Matthieu Latapy.
+\newblock Computing communities in large networks using random walks.
+\newblock In pInar Yolum, Tunga Güngör, Fikret Gürgen, and Can Özturan,
+  editors, {\em Computer and Information Sciences - ISCIS 2005}, volume 3733 of
+  {\em Lecture Notes in Computer Science}, pages 284--293. Springer Berlin
+  Heidelberg, 2005.
+
+\bibitem{PhysRevE.74.016107}
+Josep~M. Pujol, Javier B\'ejar, and Jordi Delgado.
+\newblock Clustering algorithm for determining community structure in large
+  networks.
+\newblock {\em Phys. Rev. E}, 74:016107, Jul 2006.
+
+\bibitem{Radicchi02032004}
+Filippo Radicchi, Claudio Castellano, Federico Cecconi, Vittorio Loreto, and
+  Domenico Parisi.
+\newblock Defining and identifying communities in networks.
+\newblock {\em Proceedings of the National Academy of Sciences of the United
+  States of America}, 101(9):2658--2663, 2004.
+
+\bibitem{PhysRevLett.93.218701}
+J\"org Reichardt and Stefan Bornholdt.
+\newblock Detecting fuzzy community structures in complex networks with a potts
+  model.
+\newblock {\em Phys. Rev. Lett.}, 93:218701, Nov 2004.
+
+\bibitem{Rissanen1978465}
+J.~Rissanen.
+\newblock Modeling by shortest data description.
+\newblock {\em Automatica}, 14(5):465 -- 471, 1978.
+
+\bibitem{PhysRevE.81.046114}
+Peter Ronhovde and Zohar Nussinov.
+\newblock Local resolution-limit-free potts model for community detection.
+\newblock {\em Phys. Rev. E}, 81:046114, Apr 2010.
+
+\bibitem{Rosvall29012008}
+Martin Rosvall and Carl~T. Bergstrom.
+\newblock Maps of random walks on complex networks reveal community structure.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  105(4):1118--1123, 2008.
+
+\bibitem{5586496}
+S.~Sadi, S.~Öğüdücü, and A.S. Uyar.
+\newblock An efficient community detection method using parallel clique-finding
+  ants.
+\newblock In {\em Evolutionary Computation (CEC), 2010 IEEE Congress on}, pages
+  1--7, 2010.
+
+\bibitem{Stützle2000889}
+Thomas Stützle and Holger~H. Hoos.
+\newblock Max–min ant system.
+\newblock {\em Future Generation Computer Systems}, 16(8):889 -- 914, 2000.
+
+\bibitem{Tasgin06gaCommunityDetection}
+Mursel Tasgin and Haluk Bingol.
+\newblock Community detection in complex networks using genetic algorithm.
+\newblock In {\em ECCS '06: Proc. of the European Conference on Complex
+  Systems}, April 2006.
+
+\bibitem{vandongen00}
+Stijn van Dongen.
+\newblock {\em Graph Clustering by Flow Simulation}.
+\newblock PhD thesis, University of Utrecht, 2000.
+
+\bibitem{Wasserman-Social-1994}
+S.~Wasserman and K.~Faust.
+\newblock {\em Social Network Analysis: Methods and Applications}.
+\newblock Cambridge University Press, 1994.
+
+\bibitem{Watts-Colective-1998}
+D.J. Watts and S.H. Strogatz.
+\newblock Collective dynamics of 'small-world' networks.
+\newblock {\em Nature}, (393):440--442, 1998.
+
+\bibitem{PhysRevE.67.041908}
+Haijun Zhou.
+\newblock Network landscape from a brownian particle's perspective.
+\newblock {\em Phys. Rev. E}, 67:041908, Apr 2003.
+
+\end{thebibliography}

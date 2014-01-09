@@ -1,0 +1,78 @@
+\chapter{Preliminaries}
+\begin{spacing}{1.5}
+\thispagestyle{empty}
+\section{Problem Definition}
+Communities are generally defined to be subsets of vertices which have a high density of links within them. There are various possible definitions of a community and they are divided into mainly three classes: local, global and based on vertex similarity~\cite{Fortunato201075}~\cite{Wasserman-Social-1994}. A more general, quantitative criterion is described in~\cite{Radicchi02032004} by considering the degree $k_i$ of a node $i$ belonging to a community $S \subset G$, where $G$ is the graph representing the network. The degree of node $i$ can be split as:
+
+\begin{align}
+k_i(S) = k_i^{in}(S) + k_i^{out}(S)
+\end{align}
+
+where $k_i^{in}(S)$ is the number of connections to nodes in its subgraph $S$ and $k_i^{out}(S)$ is the number of connections to nodes outside $S$. The authors define a community in 2 ways. The subgraph $S$ is a community in the \textbf{strong sense} if:
+
+\begin{align}
+k_i^{in}(S) > k_i^{out}(S), \forall i \in S
+\end{align}
+
+\newpage
+The subgraph $S$ is a community in the \textbf{weak sense} if:
+
+\begin{align}
+\displaystyle\sum_{i \in S} k_i^{in}(S) > \displaystyle\sum_{i \in S} k_i^{out}(S)
+\end{align}
+
+Even though networks can be directed, undirected, weighted or directed and weighted, we consider only undirected and unweighted networks. The problem of community detection can be defined as follows:\\
+
+\noindent \textbf{Input: }An undirected, unweighted graph $G = (V, E)$ where $V$ represents a set of nodes or vertices and $E$ represents a set of edges or links. \\
+\noindent \textbf{Output: }A partition $C = \{C_1, \ldots, C_k\}$ of $G$ into $k$ communities where $C_i \cap C_j = \varnothing, i, j = {1, \ldots, k}, i \neq j$ and $C_i \subset V,  \forall i$. \\
+
+\indent It is worth mentioning that while communities can also be hierarchical in nature, small communities can be nested within larger ones, in this work we only concentrate on finding disjoint communities.
+
+\section{Previous Work}
+
+The seminal paper by Girvan and Newman~\cite{Girvan11062002}, resulted in a lot of research into the area of community detection, especially by physicists. As a result, these days there is a wide variety of community detection algorithms from fields like physics, computer science, statistics etc. Covering all of them is beyond the scope of this work, for a more thorough review one can refer the survey by Fortunato~\cite{Fortunato201075}.\\
+\indent The methods for detecting communities can be broadly classified into hierarchical methods, modularity-based methods and other optimization methods involving statistics or dynamic processes on the graph.
+
+\subsection{Hierarchical Methods}
+
+These type of methods can be further divided into 2 subtypes: divisive hierarchical methods and agglomerative hierarchical methods.\\
+\indent Divisive hierarchical methods start from the complete graph, detect edges that connect different communities based on a certain metric such as edge betweenness~\cite{Girvan11062002}, and remove them. Examples of these approaches can be found in~\cite{Girvan11062002}~\cite{Radicchi02032004}~\cite{PhysRevE.69.026113}.\\
+\indent Agglomerative hierachical methods initially consider each node to be in its own community then and merge communities until the whole graph is obtained. Examples can be found in~\cite{newman03fast}~\cite{blondel2008fuc}~\cite{Clauset2004}.
+
+\subsection{Modularity-based Methods}
+
+Modularity~\cite{PhysRevE.69.026113} is a metric introduced by Girvan and Newman to evaluate the partitioning of a graph. It is way to quantify the clustering we have obtained in order to determine how good it might be and is a widely adopted quality metric. The idea is that the edge density of the nodes in a cluster should be higher than the expected density of the subgraph whose nodes are connected at random, but with the same degree sequence. This model is called the \emph{null model}. \\
+\indent Using an adjacency matrix representation for the graph, modularity is written as follows:
+
+\begin{align}
+Q = \frac{1}{2m}\displaystyle\sum_{ij}\left(A_{ij} - \frac{k_i k_j}{2m}\right) \delta(C_i, C_j)
+\end{align}
+
+where $A$ is the adjacency matrix of the graph $G$, $m$ is the number of edges in the graph, $\frac{k_i k_j}{2m}$ is the expected number of edges between nodes $i$ and $j$ in the null model and $\delta$ is the \emph{Kronecker} functions whose value is 1 if $i$ and $j$ are in the same community and 0 otherwise. Since nodes which do not belong in the same cluster don't contribute towards modularity, it can be rewritten as:
+
+\begin{align}
+Q = \displaystyle\sum_{i = 1}^k\left(\frac{e_i}{m} - \left(\frac{d_i}{2m}\right)^2\right)
+\end{align}
+
+where $k$ is the number of communities, $e_i$ is the total number of internal links in cluster $i$ and $d_i$ is the sum of the total degrees of nodes in $i$. So the first term represents the fraction of the total edges that are in a community and the second term represents the expected value of the fraction of edges in the null model. Values of $Q$ approaching 1 (which is the maximum), indicate strong community structure~\cite{PhysRevE.69.026113}. In practice, the value usually ranges from 0.3 - 0.7. \\
+\indent Under the assumption that high values of modularity indicate good partitions, the partition corresponding to its maximum value for a given graph should be the best partition. This is the reasoning employed by modularity-based methods which try to optimize $Q$ to partition a graph. Modularity-based methods are also the most popular methods to be employed for community detection. However, Brandes et. al. showed that maximizing modularity is a NP-hard problem~\cite{10.1109/TKDE.2007.190689}, as a result the true maximum of modularity cannot be found in polynomial time unless P = NP. However, there are several algorithms based on different heuristics which approximate the modularity maximimum in a fair amount of time.\\
+\indent The first algorithm to maximize modularity was introduced in~\cite{newman03fast}. It is an agglomerative clustering approach where vertices are merged based on the maximum increase in modularity. Several other greedy techniques have been developed, some of these can be found in~\cite{blondel2008fuc}~\cite{Clauset2004}~\cite{Newman06062006}~\cite{PhysRevE.74.016107} . A simulated annealing approaching to maximizing modularity is described in~\cite{Guimera04simulatedAnnealingNetworks}~\cite{PhysRevE.71.046101}. Extremal optimization for maximizing modularity was used by Duch and Arenas~\cite{duch-2005-72}.\\
+\indent Genetic algorithms have also been used for maximizing modularity~\cite{Tasgin06gaCommunityDetection}~\cite{2008ppsnpizzuti}~\cite{6045331}~\cite{Pizzuti:2012:BDM:2245276.2245321}.
+
+\subsection{Other Methods}
+
+Various other techniques for community detection using methods based on statistical mechanics, information theory, random walks etc  have been proposed . \\
+\indent Reichardt and Bornholdt~\cite{PhysRevLett.93.218701} proposed a Potts model approach for community detection. Another algorithm based on the Potts model approach is described in~\cite{PhysRevE.81.046114}, this method is fast and it's complexity is a little superlinear in the number of edges in the graph.\\
+\indent Random walks have also been used to detect communities. The motivation behind this is the idea that a random walker will spend a longer amount of time inside a community due to the high density of links within it. These methods are described in~\cite{PhysRevE.67.041908}~\cite{ponslatapy05}~\cite{vandongen00}. \\
+\indent Information theoretic approaches use the idea of describing a graph by using less information than that encoded in its adjacency matrix. The aim is to compress the the amount of information required to describe the flow of information across the graph. Random walk is used as a proxy for information flow. The minimum description length (MDL) principle~\cite{Rissanen1978465} can be used as a solution to this problem. The most notable algorithm using this principle, referred to as InfoMap, is described in~\cite{Rosvall29012008}.\\
+
+\section{Ant Algorithms}
+
+Before describing our algorithm, a review of ant algorithms is given. Ant algorithms are a probabilistic technique for solving computational problems using artificial ants. The ants mimic the behavior of an ant colony in nature for foraging food. As they travel, ants lay down a chemical trail called pheromone, which evaporates over time. The higher the pheromone on a path, the more likely it is to be chosen by the next ant that comes along.\\
+\indent Consider for example a food source and 2 possible paths to reach it, one shorter than the other. Assume two ants set off on both the paths simultaneously. The ant taking the shorter path will return earlier than the other one. Now this ant has covered the trip both ways while the other ant has not yet returned, so the concentration of pheromone on the shorter trail will be more. As a result, the next ant will be more likely to choose the shorter path due to its higher concentration of pheromone. This leads to a further increase of pheromone on that path and eventually all ants will end up taking the shorter path. \\
+\indent Thus, ants can be used for finding good paths within a graph. It is this basic idea that is used in ant algorithms for solving computational problems, but there are different variations. The first such approach, called Ant System (AS), was applied to the Traveling Salesman Problem by Marc Dorigo~\cite{dorigo1992}. In this approach, each ant is used to construct a tour and the pheromone level on all the edges in that tour is updated based on its length. Each ant picks the next destination based on its distance and the pheromone level on that link. A global update is applied everytime which evaporates the pheromone on all edges so the current best edges would be more like to be chosen by the next ants.\\
+\indent Since in AS each ant updates the pheromone globally, the run time can be quite high. Ant Colony System (ACS) was introduced to address this problem~\cite{585892}. In ACS, a fixed number of ants are positioned on different cities and each ant constructs a tour, only the iteration best ant, the one with the shortest tour is used to update the pheromone. Ants also employ a local pheromone update in which the pheromone of an edge was reduced as an ant traversed it in order to encourage exploration.\\
+\indent Another variation of AS, the Max-Min Ant System (MMAS), was introduced by Stutzle and Hoos~\cite{Stützle2000889}. The first change in this model is that the pheromone values are limited to the interval $[\tau_{min}, \tau_{max}]$. Secondly, the global update for each iteration is either done by the iteration best ant or the ant which has the best solution from the beginning. This is to used so as to avoid early convergence of the algorithm. Additionally, the pheromone on each edge is initialized to $\tau_{max}$ so as to encourage exploration in the beginning of the algorithm. Apart from this, MMAS used the same structure of AS for edge selection and lack of local pheromone update. Both these variations were an improvement over the original AS.\\
+\indent The algorithm proposed here does not fall into the above class of ant algorithms, also called Ant Colony Optimization (ACO) algorithms, instead it falls into the category of Ant-Based Optimization (ABO) methods. While in ACO, ants build complete solutions to the problem, in this approach ants are only used to identify good regions of the search space after which local search or construction methods are used to build the final solution. In ABO, ants only need local information as they traverse the graph. Choosing the next edge involves the pheromone value and some heurisitic information based on the rules specified for the ants. To the best of our knowledge, our algorithm is the first ABO method for detecting communities in complex networks.
+
+\end{spacing}

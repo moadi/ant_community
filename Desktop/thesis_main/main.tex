@@ -1,0 +1,51 @@
+\documentclass[12pt, letterpaper, oneside, openright]{book}
+\usepackage{amsmath, amssymb, algorithm2e}
+\usepackage{fancyhdr}
+\renewcommand*\footnoterule{} % remove line for footnote
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand\contentsname{Table of Contents}
+\renewcommand\bibname{References}
+\usepackage[nottoc,numbib]{tocbibind} % include references in TOC
+
+\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+\makeatletter
+\patchcmd{\l@chapter}% <cmd>
+  {#1}% <search>
+  {\def\numberline##1{\@chapapp~##1\hfill\mbox{}\par\nobreak}#1}% <replace>
+  {}{}% <success><failure>
+\makeatother
+
+\usepackage{setspace}
+\usepackage[top = 1in, bottom = 1in, left = 1.5in, right = 1in]{geometry}
+
+\begin{document}
+
+\frontmatter
+\include{title}
+
+\setcounter{page}{3}
+\include{abstract}
+
+\tableofcontents
+
+%\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+
+%\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+
+\include{thank}
+
+\mainmatter
+
+\include{chap1}
+\include{chap2}
+\include{chap3}
+\include{chap4}
+
+\backmatter
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

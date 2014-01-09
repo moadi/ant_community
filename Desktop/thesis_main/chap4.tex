@@ -1,0 +1,39 @@
+\chapter{Testing Algorithms}
+\begin{spacing}{1.5}
+Since clustering algorithms always produce some partition of the graph it becomes necessary to evaluate how good a partition has been obtained. Testing an algorithm implies running it on a set of problem instances whose solution is already known and comparing it with the output of the algorithm. In the problem of community detection, while the intuitive definition is the same there are a wide variety of approaches to solving it. Due to this it is necessary to be able to use benchmark graphs whose community structure is known to be able to evaluate an algorithm. While this refers to computer generated graphs, in the literature real-world networks are also used. However it is necessary to note that the communities discovered by different algorithms may not be consistent due to the large variety of different implementations. In this case it is necessary to have a different metric to evaluate the partition.\\
+\indent This chapter discusses the two most widely used benchmark graphs for generating synthetic networks with known community structure and methods to evaluate the partition obtained on these graphs and also evaluate the partition obtained in the case of real world networks.
+
+\section{Synthetic Graphs}
+
+\subsection{Girvan-Newman Benchmark}
+
+For computer generated graphs, a special class of graphs generated using the planted $\ell$-partition model~\cite{RSA:RSA1001} is quite commonly used. This model partitions a graph with $n = g \dot \ell$ vertices in $\ell$ groups with $g$ vertices each. Each vertex has a fraction $\mu$ of its links to vertices outside its group and a fraction $1 - \mu$ to vertices in its group. If $1 - \mu > 0.5$ the density of intracluster edges is more and community structure exists.\\
+\indent The Girvan-Newman benchmark~\cite{Girvan11062002} is a special case of the planted $\ell$-partition model where $n = 128$, $\ell = 4$ and the average degree of each vertex is 16.  This benchmark quickly became a standard for testing algorithms. One would intuitively expect the graph to have community structure upto $\mu < 0.5$ and most algorithms begin to fail around that value.
+
+\subsection{LFR Benchmark}
+
+In the GN benchmark, while the graph is expected to have community structure upto $\mu < 0.5$ in principle communities exist up until $\mu = 0.75$~\cite{PhysRevE.78.046110}. However, as mentioned previously most algorithms begin to fail around $\mu = 0.5$ which might be due to the graph being similar to a random graph as a result of changes in link distribution. Another drawback of the GN benchmark is that it doesn't take into account the structure of complex networks where node degree and community sizes follow a power law.\\
+\indent The LFR benchmark~\cite{PhysRevE.78.046110} was an improvement over the GN benchmark as it takes into account the structure of complex networks and thus is more representative of networks found in real life. It is also a special case of the planted $\ell$-partition model where group sizes and node degrees vary according to a power law. This poses a much harder test to community detection algorithms. In addition, these graphs can be generated quickly, the complexity of the method mentioned in~\cite{PhysRevE.78.046110} is $O(m)$, where $m$ is the number of edges in the graph.\\
+\indent We can generate different instances by varying $\mu$ to make the communities fuzzy and harder to detect. In the next section we describe metrics to evaluate the partition obtained by community detection algorithms for synthetic graphs and real world networks.
+
+\section{Partition Evaluation}
+
+\subsection{Normalized Mutual Information}
+
+For synthetic graphs, the most widely adopted quality metric is the Normalized Mutual Information (NMI), as described in~\cite{Danon05comparingcommunity}. Here we define a \emph{confusion matrix} $\mathbf{N}$, where the rows correspond to the ``real'' communities and the columns correspond to the communities found by an algorithm. $N_{ij}$ represents the number of nodes in the real community $i$ that appear in the found community $j$. The NMI, based on information theory is defined as follows:
+
+\begin{equation}
+\hspace*{-5 cm} I(A,B) = \frac{-2 \sum_{i=1}^{c_A} \sum_{j=1}^{c_B} N_{ij} \log\left ( \frac{N_{ij}N}{N_{i.} N_{.j}} \right )}{\sum_{i=1}^{c_A} N_{i.} \log \left ( \frac{N_{i.}}{N} \right ) + \sum_{j=1}^{c_B} N_{.j} \log \left ( \frac{N_{.j}}{N} \right )}
+\end{equation}
+
+where the number of real communities is denoted $c_A$ and the number of found communities is denoted $c_B$, the sum over row $i$ of matrix $N_{ij}$ is denoted $N_{i.}$ and the sum over column $j$ is denoted $N_{.j}$.\\
+\indent If the found partition is identical to the real one then $I(A,B) = 1$, which is its maximum value. If the partition found is totally independent of the real one then $I(A, B) = 0$.
+
+\subsection{Modularity}
+
+As described in Chapter 2, modularity is a widely adopted quality metric for evaluating partitions obtained on real world networks. The previous approach is not possible to apply here as we don't have prior information about the real community structure in such networks.\\
+\indent Modularity is calculated by computing the fraction of links that fall within a community as compared to the fraction if its nodes were connected randomly but keeping the same degree sequence. It was assumed that high modularity partitions correspond to a good clustering which is the motivation behind modularity optimization algorithms.\\ 
+\indent Despite the huge popularity of modularity optimization methods due to their speed and thus allowing the opportunity to analyze large networks, its properties have been recently investigated which brought forward a number of drawbacks with modularity.\\
+\indent Fortunato and Barth\'{e}lemy~\cite{Fortunato02012007} showed that modularity suffers from a resolution limit. They found that the definition of a community implied by modularity is not consistent with modularity optimization which favors partitions where several submodules are aggregated into one module. Modularity fails to indentify modules smaller than a certain scale which depends on the size of the network and the connectedness of the modules. This contradicts the notion of a community being a local measure instead of a global one. To this extent they compared the modules found using modularity optimization by simulated annealing~\cite{Guimera04simulatedAnnealingNetworks} and then reapplied the method on each module and they found that most modules themselves had a clear community structure with high modularity values. As a result the final number of partitions obtained were much more than the ones reported by modularity maximization.\\
+\indent Good et. al~\cite{PhysRevE.81.046106} further examined the performance of modularity maximization and apart from the resolution limit they found two other drawbacks. First, there are an exponential number of structurally diverse alternate partitions whose modularity is very close to the maximum, this is called the degeneracy problem. This explains the good performance of modularity maximization methods as they are able to discover some high ranking partition depending on the implementation and the reason why different algorithms can have varying outputs for the same network. Second, the maximum modularity $Q_{max}$ depends upon the size of the network and the number of modules it contains.
+\end{spacing}

@@ -1,0 +1,78 @@
+\chapter{Ant-Based Community Detection}
+\begin{spacing}{1.5}
+In this chapter, we describe our ant-based approach for detecting communities in complex networks. The algorithm is divided into three main phases: initialization, exploration and construction. The construction phase is followed by a local optimization step and a final merging step before obtaining the final partition.
+
+\section{Overview}
+
+Since our algorithm is ant-based, it consists of artificial ants which explore the graph based on a set of rules. In each cycle, all of the ants explore a local section of the graph by choosing edges based on their pheromone level. Edges with a higher pheromone value are more likely to be chosen and the pheromone on an edge is increased when an ant travels across it so that it is more likely to be chosen by other ants that follow. Based on the rules specified for exploration, ants try to discover intracommunity edges in their local section of the graph and as a result we expect them to have a higher value of pheromone towards the end of the exploration phase. The basic outline of the algorithm for the exploration phase is derived from~\cite{5910378}.  \\
+\indent Once the exploration phase is complete, we examine the edges with the highest pheromone levels and use them to build an intial clustering of the graph. After this, a local optimization step is used to boost the solution obtained based on the strong definition of a community as described in the previous chapter. Once this is done, clusters are merged depending upon certain rules which satisfy the weak definition of a community. An outline of the algorithm is shown in Figure~\ref{fig1}.
+\input{fig1}
+
+\section{Initialization}
+
+In the initilization phase an ant is placed on each vertex of the graph. Next, we initialize all the edges with the same pheromone level, set to 1. This is done so that in the beginning of the algorithm all the edges have a chance to be selected, so it encourages exploration.\\
+\indent Each ant also maintains a tabu-list, initialized to null, which is a fixed length circular queue that stores a list of the previously visited vertices by an ant. If an ant chooses a vertex which is already present in the tabu-list, then the vertex is ignored and it attempts to choose another vertex. Tabu-list further encourages exploration as ants will not just tend to stay within a small vicinity of their initial location.
+\indent Each vertex is augmented with information about the number of nodes it has in common with each of its neighbors. Since the graph is stored in an adjacency list format, each vertex maintains a list of its neighbors. Calculating the number of nodes in common between two vertices can now be done by determining the number of common elements in their adjacency lists, or a set intersection operation. 
+
+\section{Exploration}
+
+In this phase, the ants travel across the edges in the graph and lay pheromone along them. The aim of the exploration phase is to discover intracommunity edges which are used to build an initial clustering of the graph. Since communities can be intuitively thought of subgroups of vertices with a high density of internal links. This means that two adjacent vertices are more likely to be in the same community if the number of neighbors they have in common is large. This is the rule that the ants follow to discover intracommunity edges. The exploration phase is shown in Figure~\ref{fig2}.\\
+\input{fig2}
+\indent In each iteration, all the ants are moved in parallel on the graph for a fixed number of steps. This is continued until the maximum number of iterations is exceeded. For purposes of efficiency, it is better to update the pheromone after a fixed number of steps instead of updating it after every step.\\
+\indent As mentioned previously, the movement of the ants is determined by the pheromone level of the edges incident to the current vertex and the number of nodes the current vertex has in common with its neighbors (neighborhood overlap). This way intracommunity edges will have a higher probability of being selected leading to a higher level of pheromone. \\
+\indent Each edge is augmented with information about its pheromone level and the number of times it has been traversed. When an ant traverses an edge, it is scheduled to be increased by an amount equal to its initial pheromone value~\cite{5910378}. An edge may be selected by an ant with a probability that is proportional to the pheromone level of that edge and the number of nodes it has in common with the ants current vertex. Since the pheromone on all edges is initialized to 1, when the pheromone update is performed, the pheromone on each edge is increased by the number of times it was traversed.\\
+\indent Proportional selection is performed as follows. Each ant calculates the sum of the pheromone and number of common nodes it has with each neighbor and stores it in an array whose size is equal to the degree of the current vertex. While filling up the array we also maintain a running sum of the total, let this be denoted by $sum$. Then a random number between $[0, sum]$ is generated after which we sum up the array elements until the random value is reached. The index of this element corresponds to the index of the neighbor in the adjacency list and the ant chooses to move to that vertex. This way the ants will have a higher probability of choosing a vertex which belongs to the same community. When ant traverses an edge, it adds the next vertex to its tabu list to avoid visiting it multiple times.\\
+\indent We employ a couple of mechanisms to avoid getting caught in local optima. As mentioned previously, each ant maintains a tabu list of a fixed size and are prohibited from choosing vertices already present in the list. Also, the pheromone level of each edge is evaporated periodically by a certain factor which reduces over time. In the beginning, the evaporation rate is higher so as to encourage exploration and it is gradually decreased. The minimum pheromone level is set to 1 as due to evaporation we don't want the pheromone level of an edge to become so low that it may never be considered again, this also avoids the ants from converging to a small set of edges.\\
+\indent The pheromone update is performed periodically, for reasons of efficiency. As mentioned previously, each edge keeps a track of the number of times it has been traversed since the previous update. This information is used along with the current pheromone level for the update. The formula is that mentioned in~\cite{5910378}:
+
+\begin{align}
+e.phm = (1 - \eta)e.phm + e.nVisited \times e.initPhm
+\end{align}
+
+where $e$ is the edge in the graph being updated, $phm$ is the pheromone level of $e$, $\eta$ is the evaporation rate, $nVisited$ is the number of times the edge was traversed since the last update cycle and $initPhm$ is the initial pheromone level, in this case $initPhm = 1, \forall e$.\\
+\indent At the end of each cycle, two operations are performed. First, the pheromone evaporation rate is updated by a constant factor. This is to aid exploration in the beginning by having a large evaporation rate and reducing it so that the ants begin to converge on a set of edges. The initial value of $\eta$ is set to 0.5 and it is multiplied by 0.95 at the end of every iteration. Second, the ants are reset before the start of the next iteration. About half the ants stay in their current location while the other half are randomly placed as shown in Figure~\ref{fig3} The maximum number of iterations is fixed to 75.
+\input{fig3}
+
+\section{Construction}
+
+At the end of the exploration phase we expect the intracommunity edges to have a higher pheromone level, the construction phase utilizes this information to cluster the graph. The output of the construction phase is a new graph called the weighted graph. Each community corresponds to a vertex of this graph. So each vertex can be thought of a supervertex which consists of vertices agglomerated from the original graph to form different comunities. The edges in this graph will correspond to the intercommunity edges. Even though there might be multiple such edges between two given communities in the original graph, only one such edge is necessary for representing the same in the weighted graph. \\
+\indent First, we sort the edges in decreasing order of pheromone. An array called $nodeToComm$ (of size $|V|$) stores the community membership of each node. It is initialized to -1 implying no node has been assigned to a cluster. The variable $comm$, initialized to 0, keeps track of the number of communities so far. \\
+\indent To build the weighted graph we read in each edge $(i, j)$ sequentially. If $nodeToComm[i]$ and $nodeToComm[j]$ are both -1 then we create a new vertex representing a new cluster and add $i$, $j$ to it. $nodeToComm[i] \text{ and } nodeToComm[j]$ are both set to $comm$ whose value is then incremented by 1. If $i$ or $j$ are assigned a community while the other isn't, then the node which isn't assigned a community is added to the other's cluster. If both $i$ and $j$ are in separate communities, ie $nodeToComm[i] \neq nodeToComm[j]$, then we create the edge $(nodeToComm[i], nodeToComm[j])$ in the weighted graph if it doesn't exist and update the number of crossing (intercommunity) edges in the new graph.\\
+\indent Additional information is stored in the weighted graph. For each vertex (or cluster) we keep a track of the original vertices of the graph which are a part of that cluster. Each node (of the original graph) stores the number of internal and external links (and to which cluster) it has. Each cluster also stores the total pheromone (also called its $weight$) amongst all its internal links and the total pheromone (internal + pheromone along all its outgoing edges).\\
+\indent At the end of the construction phase we have built an initial clustering of the graph using the process described above. This weighted graph is now optimized by reassigning nodes which may have been correctly placed in the wrong cluster and then merging clusters to form more cohesive communities.\\
+
+\section{Optimization Phase}
+
+Based on the strong definition of a community as mentioned in chapter 2, we expect each node to have more connections to nodes within its own cluster than outside. We use this idea to reassign nodes which may have been incorrectly clustered.\\
+\indent Each node from the original graph, in the weighted graph, stores the number of links it has to its own cluster and the number of links to outside clusters. The nodes are sorted in decreasing order of outgoing links. Each node is examined to see if there is a cluster to which it has more links than its current cluster, if this is true then the node is assigned to that cluster. After this process is complete we proceed to merge clusters to obtain the final partition.\\
+\indent Since the ants are used to discover intracommunity edges, we can use the pheromone level in the weighted graph to merge clusters. The communities in the weighted graph so far may not be cohesive. Since we expect a community to have high density of internal links as compared to external links, this means that if a vertex has a high $weight$ as compared to its total pheromone, then its a good community. Otherwise, its possible that the pheromone along one of the intercommunity edges will be higher as compared to its $weight$ and we can merge the two communities to obtain a better solution. Since intercommunity edges from the original graph are condensed to one edge in the weighted graph, the more intercommunity edges we have, the higher we expect the pheromone to be along the corresponding edge in the weighted graph.\\
+\indent The fraction of the total pheromone along each outgoing edge for a vertex is calculated. Since the graph is undirected, the fraction is calculated using the total contribution from both endpoints. The fractional values for each edge are stored in an array and sorted in decreasing order. For an edge with a high fractional value, it means that the two clusters have a high number of connections between them and a better solution would be obtained by merging them.\\
+\indent In the last step, the edges sorted in decreasing order of fractional values are used to merge different clusters. For each edge $(u, v)$, if the fraction of the total pheromone on $(u,v)$ is more than the fraction of the total pheromone in vertex $u$ or $v$, they are merged. Else if more than half of the total pheromone lies within the both vertices $u$ and $v$, then we don't merge them.\\
+
+\section{Parameters}
+
+The various parameters in the algorithm are mentioned in Table~\ref{tab1}. These parameters aren't for a single type of graph but have been used for all graphs on which the algorithm is tested.
+
+\begin{table}
+\caption{Parameters in the algorithm}
+\label{tab1}
+\BlankLine
+\begin{tabular}{ | c | c | l | }
+	\hline
+	\textbf{Parameter} & \textbf{Value} & \textbf{Comments} \\
+	\hline
+	$i_{max}$ & 75 & Maximum number of iterations \\
+	\hline
+	$maxSteps$ & $\frac{1}{3} |V|$ or 75 & Maximum number of steps in each iteration \\
+	\hline
+	$\eta$ & 0.5 & Pheromone evaporation rate \\
+	\hline
+	$\Delta \eta$ & 0.95 & Pheromone update constant \\
+	\hline
+	$updatePeriod$ & $maxSteps / 3$ & Number of cycles between pheromone update \\
+	\hline
+	$LIST\_SIZE$ & 2 or 5 & Tabu list size\\
+	\hline
+\end{tabular}
+\end{table}
+\end{spacing}

@@ -144,45 +144,55 @@ void updatePheromone(Graph * g)
 	}
 }
 
+
+//write the output to a file
 void write_partition(char * output_file, WeightedGraph& wg, Graph& g)
 {
 	ofstream fout;
+
+	//improve later
 	if(outputFile == NULL)
 	{
 		string output(inputFile);
-		size_t pos = output.find(".");
-		if(pos != std::string::npos)
+		string toFind("net");
+		string toReplace("clu");
+		if(output.find(toFind.c_str()) != string::npos)
 		{
-			output[pos+1] = 'c';
-			output[pos+2] = 'l';
-			output[pos+3] = 'u';
-			fout.open(output.c_str());
+			size_t pos = output.find(toFind.c_str());
+			output.replace(pos, toFind.length(), toReplace, 0, toReplace.length());
 		}
+		fout.open(output.c_str());
+		cout << "Writing output to: " << output << "\n";
 	}
 	else
 		fout.open(output_file);
 
 	std::vector<int> n2c(g.num_vertices);
+	int comm = 1;
 
 	for(int i = 0; i < wg.num_vertices; i++)
 	{
-		if(wg.vertex[i].id == -1 || wg.vertex[i].origNodes.size() == 0)
+		if(wg.vertex[i].id != i || wg.vertex[i].origNodes.size() == 0)
+		{
+			++comm;
 			continue;
+		}
 		for(int j = 0; j < wg.vertex[i].origNodes.size(); j++)
 		{
-			n2c[wg.vertex[i].origNodes[j]] = i+1;
+			n2c[wg.vertex[i].origNodes[j]] = comm;
 		}
 	}
 	fout << "*Vertices " << g.num_vertices << "\n";
-	for(auto it = n2c.begin(); it != n2c.end(); it++)
+	for(int i = 0; i < n2c.size(); i++)
 	{
-		fout << *it << "\n";
+		fout << n2c[i] << "\n";
 	}
 	fout.close();
 }
 
 
-/*Function which moves all
+/*
+ * move all
  * the ants on the graph
  * in parallel.
  */
@@ -214,16 +224,7 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 
 				if(ants[i].tabulist.searchList(next_vertex) == false)// || ants[i].location.degree <= 2  )
 				{
-					//ants[i].tabulist.addToList(next_vertex);
 					ants[i].location = g->vertex[next_vertex];
-					/*
-					 * Just a test
-					 */
-					/*if(ants[i].location.degree == 1)
-					{
-						ants[i].tabulist.clearList();
-					}*/
-					//ants[i].tabulist.addToList(next_vertex);
 					moved = true;
 					if(cur_vertex < next_vertex)
 					{
@@ -254,13 +255,13 @@ void usage(char * progName, string errorMsg)
 	cerr << errorMsg << "\n";
 	cerr << "usage: " << progName << " inputFile [options] \n";
 	cerr << "inputFile: the graph whose community structure is to be found \n";
-	cerr << "-o : specify the output file to write the clustering to, extension should be .clu so the clusters can be visualized in Pajek \n";
+	cerr << "-o : specify the output file, extension should be \".clu\" \n";
 	exit(EXIT_FAILURE);
 }
 
 
 /*
- * Function to parse the arguments
+ * parse the arguments
  * passed to the program
  */
 void parse_args(int argc, char** argv)

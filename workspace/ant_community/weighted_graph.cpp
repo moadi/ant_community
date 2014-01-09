@@ -282,7 +282,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 
 		}
 
-		else if((edge_it->second / vertex[node2].total) > (vertex[node1].weight / vertex[node1].total)) //if the pheromone along this edge is high
+		else if((edge_it->second / vertex[node2].total) > (vertex[node2].weight / vertex[node2].total)) //if the pheromone along this edge is high
 		{
 			//if node1 has more elements
 			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
@@ -299,7 +299,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 		{
 			continue;
 		}
-		else //proceed to merge
+		/*else //proceed to merge
 		{
 			//if node1 has more elements
 			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
@@ -310,7 +310,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 			{
 				mergeNodes(node2, node1);
 			}
-		}
+		}*/
 
 	}
 }
