@@ -19,11 +19,15 @@ void WeightedGraph::displayGraph()
 	std::unordered_map<pair<int, int>, int >::iterator cross_edges_it;
 	std::unordered_map<pair<int, int>, double >::iterator cross_phm_it;
 	ofstream fout("/home/mua193/Desktop/NMI/output.dat");
+	int num = 0;
+	int clusters = 0;
 	for(int i = 0; i < num_vertices; i++)
 	{
 		//if this cluster has been merged or all it's members reassigned , ignore
 		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0))
 					continue;
+
+		++clusters;
 
 		cout << "Original graph members of vertex " << i << " : \n";
 
@@ -35,6 +39,7 @@ void WeightedGraph::displayGraph()
 		{
 			cout << vertex[i].origNodes[j] + 1   << " ";
 			fout << vertex[i].origNodes[j] + 1 << " ";
+			num++;
 		}
 		fout << "\n";
 		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << ", " << vertex[i].total << " ]  ";
@@ -61,6 +66,10 @@ void WeightedGraph::displayGraph()
 		cout << "\n \n";
 	}
 	cout << "Number of edges = " << edges.cross_edges.size() << "\n\n";
+
+	cout << "Vertices = " << num << endl << endl;
+
+	cout << "Clusters = " << clusters << endl << endl;
 
 	fout.close();
 }
@@ -133,7 +142,7 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 
 	//update the weight and total of node1
 	vertex[node1].weight += vertex[node2].weight + n1_n2_phm_it->second;
-	vertex[node1].total += vertex[node2].weight; //since the outgoing phm is already counted
+	vertex[node1].total += vertex[node2].total - n1_n2_phm_it->second; //the edge between the 2 already counts towards the total
 
 	//add the original nodes of node2 into node1
 	vertex[node1].origNodes.insert(vertex[node1].origNodes.end(),
@@ -206,6 +215,7 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 
 			//increment the degree of node1
 			++vertex[node1].degree;
+
 		}
 		else //if the edge with node1 exists
 		{
@@ -233,12 +243,12 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 	} //Done updating the graph
 }
 
-void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& fracEdges)
+void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& fracEdges, Parameters &p)
 {
 	for(auto it = fracEdges.begin(); it != fracEdges.end(); it++) //iterate over the sorted edges
 	{
-		if(it->second <= 0.05)
-			continue;
+		//if(it->second <= 0.01)
+			//continue;
 
 		pair<int, int> edge = it->first;
 		auto edge_it = edges.cross_phm.find(edge); //get the edge, check if it is still valid
@@ -263,43 +273,17 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 			node2 = vertex[node2].id;
 		}
 
-		double node1_frac, node2_frac; //the weight of each node is calculated (normalized)
+		double node1_frac, node2_frac; //the weight of each node is calculated
 		node1_frac = vertex[node1].weight / vertex[node1].total;
 		node2_frac = vertex[node2].weight / vertex[node2].total;
 
 		//CHANGE HERE, SEE IT LATER!!
-		if((edge_it->second / vertex[node1].total) > (vertex[node1].weight / vertex[node1].total))
-		{
-			//if node1 has more elements
-			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
-			{
-				mergeNodes(node1, node2);
-			}
-			else //node2 has more elements
-			{
-				mergeNodes(node2, node1);
-			}
-
-		}
-
-		else if((edge_it->second / vertex[node2].total) > (vertex[node2].weight / vertex[node2].total)) //if the pheromone along this edge is high
-		{
-			//if node1 has more elements
-			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
-			{
-				mergeNodes(node1, node2);
-			}
-			else //node2 has more elements
-			{
-				mergeNodes(node2, node1);
-			}
-		}
-		//if both nodes are very well connected inside (>=50%), then no don't merge
-		else if((node1_frac >= 0.5) && (node2_frac >= 0.5))
+		//if both nodes are very well connected inside, don't merge
+		if((node1_frac > p.threshold) && (node2_frac > p.threshold))
 		{
 			continue;
 		}
-		/*else //proceed to merge
+		else if((edge_it->second / vertex[node1].weight) > node1_frac)
 		{
 			//if node1 has more elements
 			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
@@ -310,7 +294,33 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 			{
 				mergeNodes(node2, node1);
 			}
-		}*/
+
+		}
+
+		else if((edge_it->second / vertex[node2].weight) > node2_frac) //if the pheromone along this edge is high
+		{
+			//if node1 has more elements
+			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
+			{
+				mergeNodes(node1, node2);
+			}
+			else //node2 has more elements
+			{
+				mergeNodes(node2, node1);
+			}
+		}
+		else //proceed to merge
+		{
+			//if node1 has more elements
+			if(vertex[node1].origNodes.size() >= vertex[node2].origNodes.size())
+			{
+				mergeNodes(node1, node2);
+			}
+			else //node2 has more elements
+			{
+				mergeNodes(node2, node1);
+			}
+		}
 
 	}
 }

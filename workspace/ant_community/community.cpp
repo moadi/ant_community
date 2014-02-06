@@ -217,6 +217,7 @@ void Community::reassign_communities()
 {
 	//loop through the nodes in decreasing order of out degrees to different clusters
 	int num = 0;
+	int total = 0;
 	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
 	{
 		int cluster; //cluster to which this node has max out degree
@@ -236,9 +237,11 @@ void Community::reassign_communities()
 		if(max_out_degree > in_degree[it->first])
 		{
 			//cout << "New cluster for node " << it->first + 1 << " =  " << cluster << endl << endl;
+			++total;
 			n2c[it->first] = cluster;
 		}
 	}
+	cout << "Total nodes replaced = " << total << "\n\n";
 }
 
 WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
@@ -246,13 +249,6 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 	WeightedGraph wg;
 	wg.num_vertices = comm;
 	wg.vertex.resize(comm);
-
-	//to avoid multiple insertions of nodes in to the origNodes vector
-	//use a set to ensure only unique elements are inserted
-	std::vector<std::set<int> > nodes;
-	std::set<int>::iterator set_it1;
-	std::set<int>::iterator set_it2;
-	nodes.resize(comm);
 
 	for(int i = 0; i < comm; i++)
 	{
@@ -271,29 +267,23 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 			wg.vertex[n2c[a]].weight += phm;
 			wg.vertex[n2c[a]].total += phm;
 
-			set_it1 = nodes[n2c[a]].find(a);
-			set_it2 = nodes[n2c[a]].find(b);
-
-			if((set_it1 == nodes[n2c[a]].end()) && (set_it2 == nodes[n2c[a]].end())) //if both elements aren't present in the set then add to set and origNodes
+			if(std::find(wg.vertex[n2c[a]].origNodes.begin(), wg.vertex[n2c[a]].origNodes.end(), a) != wg.vertex[n2c[a]].origNodes.end()) //if a is present
 			{
-				wg.vertex[n2c[a]].origNodes.push_back(a); //add the nodes to the orgiNodes vector
-				wg.vertex[n2c[a]].origNodes.push_back(b);
-
-				//add to the set as well
-				nodes[n2c[a]].insert(a);
-				nodes[n2c[a]].insert(b);
+				//do nothing
 			}
-			else if((set_it1 != nodes[n2c[a]].end()) && (set_it2 == nodes[n2c[a]].end())) //if a is present in the set but b isn't
+			else
 			{
-				nodes[n2c[a]].insert(b);
-				wg.vertex[n2c[a]].origNodes.push_back(b);
-			}
-			else if((set_it1 == nodes[n2c[a]].end()) && (set_it2 != nodes[n2c[a]].end())) //if b is present in the but a isn't
-			{
-				nodes[n2c[a]].insert(a);
 				wg.vertex[n2c[a]].origNodes.push_back(a);
 			}
 
+			if(std::find(wg.vertex[n2c[a]].origNodes.begin(), wg.vertex[n2c[a]].origNodes.end(), b) != wg.vertex[n2c[a]].origNodes.end()) //if b is present
+			{
+				//do nothing
+			}
+			else
+			{
+				wg.vertex[n2c[a]].origNodes.push_back(b);
+			}
 		}
 		else
 		{
@@ -306,6 +296,25 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 			{
 				edge = make_pair(n2c[b], n2c[a]);
 			}
+
+			if(std::find(wg.vertex[n2c[a]].origNodes.begin(), wg.vertex[n2c[a]].origNodes.end(), a) != wg.vertex[n2c[a]].origNodes.end()) //if a is present
+			{
+				//do nothing
+			}
+			else
+			{
+				wg.vertex[n2c[a]].origNodes.push_back(a);
+			}
+
+			if(std::find(wg.vertex[n2c[b]].origNodes.begin(), wg.vertex[n2c[b]].origNodes.end(), b) != wg.vertex[n2c[b]].origNodes.end()) //if b is present
+			{
+				//do nothing
+			}
+			else
+			{
+				wg.vertex[n2c[b]].origNodes.push_back(b);
+			}
+
 			std::unordered_map<pair<int, int>, int >::iterator it1;
 			std::unordered_map<pair<int, int>, double >::iterator it2;
 			it1 = wg.edges.cross_edges.find(edge);
@@ -325,31 +334,6 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 
 				wg.edges.cross_edges.insert(make_pair(edge, 1));
 				wg.edges.cross_phm.insert(make_pair(edge, phm));
-
-				//TEST!!!
-				set_it1 = nodes[n2c[a]].find(a);
-				set_it2 = nodes[n2c[b]].find(b);
-
-				if((set_it1 == nodes[n2c[a]].end()) && (set_it2 == nodes[n2c[b]].end())) //if both elements aren't present in the set then add to set and origNodes
-				{
-					wg.vertex[n2c[a]].origNodes.push_back(a); //add the nodes to the orgiNodes vector
-					wg.vertex[n2c[b]].origNodes.push_back(b);
-
-					//add to the set as well
-					nodes[n2c[a]].insert(a);
-					nodes[n2c[b]].insert(b);
-				}
-				else if((set_it1 != nodes[n2c[a]].end()) && (set_it2 == nodes[n2c[b]].end())) //if a is present in the set but b isn't
-				{
-					nodes[n2c[b]].insert(b);
-					wg.vertex[n2c[b]].origNodes.push_back(b);
-				}
-				else if((set_it1 == nodes[n2c[a]].end()) && (set_it2 != nodes[n2c[b]].end())) //if b is present in the but a isn't
-				{
-					nodes[n2c[a]].insert(a);
-					wg.vertex[n2c[a]].origNodes.push_back(a);
-				}
-
 			}
 			else //if the pair exists, then this is another crossing edge
 			{

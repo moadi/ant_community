@@ -16,7 +16,8 @@ int edge_counter;
  * Takes as a parameter a reference to the file pointer, clears the
  * flags and sets the pointer to the beginning.
  */
-void reset_pointer(ifstream &fin) {
+void reset_pointer(ifstream &fin)
+{
 	fin.clear();
 	fin.seekg(0, fin.beg);
 }
@@ -30,7 +31,8 @@ void reset_pointer(ifstream &fin) {
 int count_vertices(ifstream &fin) {
 	string line;
 	int result = 0;
-	while (!fin.eof()) {
+	while (!fin.eof())
+	{
 		getline(fin, line);
 		if (string::npos != line.find("node"))
 			result++;
@@ -44,7 +46,7 @@ int count_vertices(ifstream &fin) {
 /*
  * Count vertices in Pajek file
  */
-int count_vertices_pajek(ifstream &fin)
+int count_vertices_pajek(ifstream& fin)
 {
 	string line;
 	char * ptr;
@@ -75,7 +77,11 @@ Graph::Graph(char * fileName)
 		string line;
 		num_vertices = count_vertices_pajek(fin);
 		vertex = new Vertex[num_vertices];
-
+		for(int i = 0; i < num_vertices; i++)
+		{
+			vertex[i].id = i;
+			vertex[i].degree = 0;
+		}
 		//Read vertex IDs
 		do
 		{
@@ -83,7 +89,7 @@ Graph::Graph(char * fileName)
 			string id_text;
 			if(string::npos != line.find("Edges"))
 				break;
-			int start_pos = line.find("\"");
+			/*int start_pos = line.find("\"");
 			int id;
 			if (string::npos != start_pos)
 			{
@@ -95,9 +101,11 @@ Graph::Graph(char * fileName)
 				id--;
 				vertex[id].id = id;
 				vertex[id].degree = 0;
-			}
+			}*/
 		}
 		while(!fin.eof());
+
+
 
 		int source, target;
 
@@ -140,9 +148,18 @@ Graph::Graph(char * fileName)
 			target--;
 			pair<int, int> edge_key;
 			Edge edge;
-			edge.v1 = source;
-			edge.v2 = target;
-			edge_key = make_pair(source, target);
+			if(source < target)
+			{
+				edge.v1 = source;
+				edge.v2 = target;
+				edge_key = make_pair(source, target);
+			}
+			else
+			{
+				edge.v1 = target;
+				edge.v2 = source;
+				edge_key = make_pair(target, source);
+			}
 			edges.insert(make_pair(edge_key, edge));
 			vertex[source].neighbors[count[source]] = target;
 			vertex[target].neighbors[count[target]] = source;

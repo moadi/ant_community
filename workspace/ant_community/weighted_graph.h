@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "graph.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -58,7 +59,7 @@ class WeightedGraph
 
 		void calc_edge_total();
 
-		void mergeClusters(std::vector<pair<pair<int, int>, double > >&);
+		void mergeClusters(std::vector<pair<pair<int, int>, double > >&, Parameters&);
 
 		void mergeNodes(int, int);
 

@@ -10,6 +10,7 @@
 #include "tabulist.h"
 #include "ant.h"
 #include "helper.h"
+#include "parameters.h"
 
 
 #include <iostream>
@@ -24,10 +25,9 @@
 
 using namespace std;
 
-int maxSteps;
-int updatePeriod;
+//int maxSteps;
+//int updatePeriod;
 double eta = 0.5;
-double maxPhm = 10000.0;
 double minPhm = 1;
 char * outputFile = NULL;
 char * inputFile = NULL;
@@ -58,7 +58,6 @@ struct greater_than_key_2
 	}
 };
 
-
 /* Function to reset the position of the ants
  * after each iteration is complete
  */
@@ -78,7 +77,7 @@ void resetAnts(Ant * ants, Graph * graph, Helper &helper)
 /*Function to choose the next vertex the ant
  * should move to
  */
-int chooseNext(Ant * ant, Graph * g, Helper &helper)
+int chooseNext(Ant* ant, Graph* g, Helper& helper)
 {
 	unordered_map<pair<int, int>, Edge>::iterator edge_it;
 	int cur_vertex = ant->location.id; //current location of ant
@@ -133,7 +132,7 @@ int chooseNext(Ant * ant, Graph * g, Helper &helper)
  * the pheromone value
  * of each edge
  */
-void updatePheromone(Graph * g)
+void updatePheromone(Graph* g)
 {
 	for(auto edge_it = g->edges.begin(); edge_it != g->edges.end(); edge_it++)
 	{
@@ -174,12 +173,16 @@ void write_partition(char * output_file, WeightedGraph& wg, Graph& g)
 	{
 		if(wg.vertex[i].id != i || wg.vertex[i].origNodes.size() == 0)
 		{
-			++comm;
+			//++comm;
 			continue;
 		}
 		for(int j = 0; j < wg.vertex[i].origNodes.size(); j++)
 		{
 			n2c[wg.vertex[i].origNodes[j]] = comm;
+			if (j - wg.vertex[i].origNodes.size() == 1)
+			{
+				++comm;
+			}
 		}
 	}
 	fout << "*Vertices " << g.num_vertices << "\n";
@@ -196,15 +199,15 @@ void write_partition(char * output_file, WeightedGraph& wg, Graph& g)
  * the ants on the graph
  * in parallel.
  */
-void antsMove(Ant * ants, Graph * g, Helper &helper)
+void antsMove(Ant * ants, Graph * g, Helper& helper, Parameters& p)
 {
 	bool moved;
 	typename unordered_map<pair<int, int>, Edge>::iterator edge_it;
 	pair<int, int> edge;
 
-	for(int j = 1; j <= maxSteps; j++)
+	for(int j = 1; j <= p.maxSteps; j++)
 	{
-		if(j % updatePeriod == 0)
+		if(j % p.updatePeriod == 0)
 		{
 			updatePheromone(g);
 		}
@@ -215,12 +218,11 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 			ants[i].tabulist.addToList(cur_vertex);
 			int numTries = 0;
 			moved = false;
-			while(numTries < 2 && !moved)
+			while(numTries < p.maxTries && !moved)
 			{
 				int next_vertex = chooseNext(&ants[i], g, helper);
 
-				//if the next vertex if not in the tabulist, then move the ant and add this
-				//vertex to the tabulist
+				//if the next vertex if not in the tabulist, then move the ant
 
 				if(ants[i].tabulist.searchList(next_vertex) == false)// || ants[i].location.degree <= 2  )
 				{
@@ -247,7 +249,7 @@ void antsMove(Ant * ants, Graph * g, Helper &helper)
 }
 
 /*
- * Display program usage information
+ * Display usage
  */
 
 void usage(char * progName, string errorMsg)
@@ -259,11 +261,6 @@ void usage(char * progName, string errorMsg)
 	exit(EXIT_FAILURE);
 }
 
-
-/*
- * parse the arguments
- * passed to the program
- */
 void parse_args(int argc, char** argv)
 {
 	if(argc < 2)
@@ -317,8 +314,8 @@ int main(int argc, char **argv)
 	cout<<"Finalizing 1-hop neighborhood...\n\n";
 
 	//sort the adjacent nodes for each vertex to compute intersection easily
-	for(int i=0; i<g.num_vertices; i++)
-		std::sort(g.vertex[i].neighbors, g.vertex[i].neighbors+g.vertex[i].degree);
+	for(int i=0; i < g.num_vertices; i++)
+		std::sort(g.vertex[i].neighbors, g.vertex[i].neighbors + g.vertex[i].degree);
 
 	//calculate the intersection size of each node with its neighbor
 	calcNeighborhoodSize(&g);
@@ -334,32 +331,22 @@ int main(int argc, char **argv)
 		ants[i].location = g.vertex[i];
 	}
 
-	cout<<"The total number of edges is = "<<g.num_edges<<"\n\n";
+	cout<<"The total number of edges is = "<< g.num_edges<<"\n\n";
 
-	cout<<"The number of vertices is = "<<g.num_vertices<<"\n\n";
+	cout<<"The number of vertices is = "<< g.num_vertices<<"\n\n";
 
-	//set the number of iterations of function antsMove, depending on graph size
-	if(g.num_vertices > 113)
-	{
-		maxSteps = 75;
-		updatePeriod = maxSteps / 3;
-	}
-	else
-	{
-		maxSteps = (int) ((2.0/3.0) * g.num_vertices);
-		updatePeriod = maxSteps / 3;
-	}
+	Parameters p(g);
 
 	Helper helper(g);
 
 	start = clock();
 
 	//exploration of the graph is done by the ants
-	for(int i = 0; i < 75; i++)
+	for(int i = 0; i < p.maxIterations; i++)
 	{
-		antsMove(ants, &g, helper);
+		antsMove(ants, &g, helper, p);
 		resetAnts(ants, &g, helper);
-		eta = eta * 0.95;
+		eta = eta * p.decay;
 		if (eta < 0.02) //we don't want the evaporation factor to get too small
 		{
 			eta = 0.02;
@@ -377,35 +364,11 @@ int main(int argc, char **argv)
 
 	std::sort(finalEdges.begin(), finalEdges.end(), greater_than_key());
 
-	/*for(auto it = finalEdges.begin(); it != finalEdges.end(); it++)
-	{
-		int a = it->v1;
-		int b = it->v2;
-		cout << "(" << ++a << "," << ++b << ")" << setw(10) << "	:	" << setw(5) << it->phm << "\n";
-	}*/
-
 	delete[] ants; //remove the ants
 	cout << "\n";
 
 	Community c(g);
 	WeightedGraph wg = c.partition_one_level(g, finalEdges);
-
-	//wg.displayGraph();
-	//wg.calc_edge_total();
-
-	/*std::vector<pair<pair<int, int>, double > > fracEdges;
-
-	fracEdges.resize(wg.edgeTotal.size());
-
-	for(auto it = wg.edgeTotal.begin(); it != wg.edgeTotal.end(); it++)
-	{
-		pair<int, int> edge = it->first;
-		double frac = it->second;
-		pair<pair<int, int>, double > frac_edge(edge, frac);
-		fracEdges.push_back(frac_edge);
-	}
-
-	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());*/
 
 	cout << "Modularity of initial partition = " << wg.modularity(g) << "\n\n";
 
@@ -415,9 +378,17 @@ int main(int argc, char **argv)
 
 	c.reassign_communities();
 
+
+
+
+
+
+
+
+
 	WeightedGraph new_wg = c.rebuild_graph(finalEdges);
 
-	cout <<"\n\n";
+	cout << "\n\n";
 
 	//new_wg.displayGraph();
 
@@ -439,17 +410,11 @@ int main(int argc, char **argv)
 
 	cout << "Modularity of new partition = " << new_wg.modularity(g) << "\n\n";
 
-	//wg.mergeClusters(fracEdges);
-
-	new_wg.mergeClusters(fracEdges);
+	new_wg.mergeClusters(fracEdges, p);
 
 	new_wg.displayGraph();
 
 	cout <<"\n\n";
-
-	//wg.displayGraph();
-
-	//cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
 
 	cout << "Modularity of final partition = " << new_wg.modularity(g) << "\n\n";
 
