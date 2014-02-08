@@ -373,32 +373,55 @@ int main(int argc, char **argv)
 	cout << "Modularity of initial partition = " << wg.modularity(g) << "\n\n";
 
 	c.sort_out_degrees();
-
 	//c.displayOutdegree(g);
-
 	c.reassign_communities();
-
-
-
-
-
-
-
-
-
+	double new_modularity, prev_modularity;
 	WeightedGraph new_wg = c.rebuild_graph(finalEdges);
+
+	while(1)
+	{
+		prev_modularity = wg.modularity(g);
+		new_modularity = new_wg.modularity(g);
+
+		if(new_modularity > prev_modularity)
+		{
+			prev_modularity = new_modularity;
+			wg = c.rebuild_graph(finalEdges);
+		}
+		else
+		{
+			break;
+		}
+
+		c.reset_degrees();
+		c.recalc_degrees(finalEdges);
+		c.sort_out_degrees();
+		c.reassign_communities();
+		new_wg = c.rebuild_graph(finalEdges);
+	}
+
+	/*while(c.nodes_replaced > 10)
+	{
+		c.reset_degrees();
+		c.recalc_degrees(finalEdges);
+		c.sort_out_degrees();
+		c.reassign_communities();
+		wg = c.rebuild_graph(finalEdges);
+	}*/
+
+	//WeightedGraph new_wg = c.rebuild_graph(finalEdges);
 
 	cout << "\n\n";
 
 	//new_wg.displayGraph();
 
-	new_wg.calc_edge_total();
+	wg.calc_edge_total();
 
 	std::vector<pair<pair<int, int>, double > > fracEdges;
 
-	fracEdges.resize(new_wg.edgeTotal.size());
+	fracEdges.resize(wg.edgeTotal.size());
 
-	for(auto it = new_wg.edgeTotal.begin(); it != new_wg.edgeTotal.end(); it++)
+	for(auto it = wg.edgeTotal.begin(); it != wg.edgeTotal.end(); it++)
 	{
 		pair<int, int> edge = it->first;
 		double frac = it->second;
@@ -408,15 +431,15 @@ int main(int argc, char **argv)
 
 	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
 
-	cout << "Modularity of new partition = " << new_wg.modularity(g) << "\n\n";
+	cout << "Modularity of new partition = " << wg.modularity(g) << "\n\n";
 
-	new_wg.mergeClusters(fracEdges, p);
+	wg.mergeClusters(fracEdges, p);
 
-	new_wg.displayGraph();
+	wg.displayGraph();
 
 	cout <<"\n\n";
 
-	cout << "Modularity of final partition = " << new_wg.modularity(g) << "\n\n";
+	cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
 
 	//write_partition(outputFile, new_wg, g);
 

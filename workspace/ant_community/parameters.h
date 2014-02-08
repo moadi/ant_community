@@ -39,7 +39,7 @@ class Parameters
 			}
 			else
 			{
-				threshold = 0.50;
+				threshold = 0.35;
 			}
 		}
 };

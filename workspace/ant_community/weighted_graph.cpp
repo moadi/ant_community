@@ -279,7 +279,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 
 		//CHANGE HERE, SEE IT LATER!!
 		//if both nodes are very well connected inside, don't merge
-		if((node1_frac > p.threshold) && (node2_frac > p.threshold))
+		if((node1_frac >= p.threshold) && (node2_frac >= p.threshold))
 		{
 			continue;
 		}

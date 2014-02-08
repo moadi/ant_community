@@ -18,6 +18,7 @@ class Community
 		std::vector<int> tot_out; //total out degree of each vertex
 		std::vector<std::unordered_map<int, int> > out_degree; //no. of links each node has to different clusters
 		std::vector<pair<int, int> > out_degrees; //stores the sorted out_degrees in decreasing order of out degree
+		int nodes_replaced;
 
 		Community(Graph&); //constructor
 
@@ -32,6 +33,10 @@ class Community
 		void reassign_communities(); //reassign the communities of the nodes based on the out degrees
 
 		WeightedGraph rebuild_graph(std::vector<Edge>&); //rebuild the new graph after communities have been reassigned
+
+		void recalc_degrees(std::vector<Edge>&); // recalculate the in-degree and out-degree for each node
+
+		void reset_degrees(); //resets the degrees of all vertices
 };
 
 #endif /* COMMUNITY_H_ */

@@ -217,7 +217,7 @@ void Community::reassign_communities()
 {
 	//loop through the nodes in decreasing order of out degrees to different clusters
 	int num = 0;
-	int total = 0;
+	nodes_replaced = 0;
 	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
 	{
 		int cluster; //cluster to which this node has max out degree
@@ -237,11 +237,11 @@ void Community::reassign_communities()
 		if(max_out_degree > in_degree[it->first])
 		{
 			//cout << "New cluster for node " << it->first + 1 << " =  " << cluster << endl << endl;
-			++total;
+			++nodes_replaced;
 			n2c[it->first] = cluster;
 		}
 	}
-	cout << "Total nodes replaced = " << total << "\n\n";
+	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
 }
 
 WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
@@ -418,27 +418,67 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 	return g;
 }*/
 
-/*double Community::modularity(Graph& g, int tot_m)
+void Community::reset_degrees()
 {
-	vector<int> total(comm); //total degree of each community
-	int comm_degree; //degree of a community
-
-	for(unsigned int i = 0; i < total.size(); i++)
+	for(unsigned int i = 0; i < in_degree.size(); i++)
 	{
-		comm_degree = 0;
-		for(unsigned int j = 0; j < communities[i].size(); j++)
+		in_degree[i] = 0;
+		tot_out[i] = 0;
+		out_degree[i].clear();
+	}
+}
+
+
+void Community::recalc_degrees(std::vector<Edge>& edges)
+{
+	for(auto it = edges.begin(); it != edges.end(); it++)
+	{
+		int a = it->v1;
+		int b = it->v2;
+		if(n2c[a] == n2c[b]) // both nodes in the same community
 		{
-			comm_degree += g.vertex[communities[i][j]].degree;
+			//update in_degree
+			++in_degree[a];
+			++in_degree[b];
 		}
-		total[i] = comm_degree;
+		else // different communities
+		{
+			auto out_deg_it_1 = out_degree[a].find(n2c[b]);
+			auto out_deg_it_2 = out_degree[b].find(n2c[a]);
+
+			if(out_deg_it_1 == out_degree[a].end() && out_deg_it_2 == out_degree[b].end()) //first time this edge is encountered
+			{
+				out_degree[a].insert(make_pair(n2c[b], 1));
+				out_degree[b].insert(make_pair(n2c[a], 1));
+
+				tot_out[a]++;
+				tot_out[b]++;
+			}
+			else if((out_deg_it_1 == out_degree[a].end()) && (out_deg_it_2 != out_degree[b].end()))
+			{
+				out_degree[a].insert(make_pair(n2c[b], 1));
+				out_deg_it_2->second++;
+
+				tot_out[a]++;
+				tot_out[b]++;
+			}
+			else if((out_deg_it_1 != out_degree[a].end()) && (out_deg_it_2 == out_degree[b].end()))
+			{
+				out_degree[b].insert(make_pair(n2c[a], 1));
+				out_deg_it_1->second++;
+
+				tot_out[a]++;
+				tot_out[b]++;
+			}
+			else
+			{
+				out_deg_it_1->second++;
+				out_deg_it_2->second++;
+
+				tot_out[a]++;
+				tot_out[b]++;
+			}
+
+		}
 	}
-
-	double q = 0;
-
-	for(unsigned int i = 0; i < communities.size(); i++)
-	{
-		q += ( ( (double) in_links[i] / tot_m) - ( ( ( (double) total[i] / (2 * tot_m)) ) * ( ( (double) total[i] / (2 * tot_m)) ) ));
-	}
-	return q;
-}*/
-
+}
