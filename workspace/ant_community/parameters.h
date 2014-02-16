@@ -12,6 +12,7 @@ class Parameters
 		int maxTries; //max number of times ant tries to move
 		int updatePeriod; //number of cycle after which to update pheromone
 		double threshold; //sets how well connected a cluster is
+		int max_decrease; // maximum number of times the modularity drops
 
 		Parameters(Graph &g)
 		{
@@ -33,14 +34,25 @@ class Parameters
 			long int max_edges = ((g.num_vertices)*(g.num_vertices - 1))/2;
 			double p =  ((double) g.num_edges / max_edges) * 100;
 			cout << "Percentage of links = " << p << "\n\n";
-			if (p <= 0.100)
+			if (p < 0.100)
 			{
-				threshold = 0.80;
+				threshold = 0.90;
 			}
-			else
+			else if(p >= 1)
+			{
+				threshold = 0.25;
+			}
+			else if(p >= 0.100 && p < 1)
 			{
 				threshold = 0.35;
 			}
+
+			//added as a check
+			if(g.num_vertices < 128)
+			{
+				threshold = 0.5;
+			}
+			max_decrease = 7;
 		}
 };
 

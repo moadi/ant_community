@@ -32,16 +32,16 @@ void WeightedGraph::displayGraph()
 		cout << "Original graph members of vertex " << i << " : \n";
 
 		//COME BACK AND CHANGE THIS (FOR DEBUGGING ONLY)
-		std::sort(vertex[i].origNodes.begin(), vertex[i].origNodes.end());
+		//std::sort(vertex[i].origNodes.begin(), vertex[i].origNodes.end());
 
 
 		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
 		{
 			cout << vertex[i].origNodes[j] + 1   << " ";
-			fout << vertex[i].origNodes[j] + 1 << " ";
+			//fout << vertex[i].origNodes[j] + 1 << " ";
 			num++;
 		}
-		fout << "\n";
+		//fout << "\n";
 		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << ", " << vertex[i].total << " ]  ";
 		cout << "Degree of vertex = " << vertex[i].degree << "\n";
 		cout << "Vertex is connected to clusters with phm: \n";
@@ -70,6 +70,28 @@ void WeightedGraph::displayGraph()
 	cout << "Vertices = " << num << endl << endl;
 
 	cout << "Clusters = " << clusters << endl << endl;
+
+	clusters = 1;
+
+	std::vector<int> n2c(num);
+
+	for(int i = 0; i < num_vertices; i++)
+	{
+		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0))
+			continue;
+
+		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
+		{
+			n2c[vertex[i].origNodes[j]] = clusters;
+		}
+		++clusters;
+	}
+
+	for(auto it = n2c.begin(); it != n2c.end(); it++)
+	{
+		fout << *it;
+		fout << "\n";
+	}
 
 	fout.close();
 }
@@ -243,7 +265,7 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 	} //Done updating the graph
 }
 
-void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& fracEdges, Parameters &p)
+void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& fracEdges, Parameters& p)
 {
 	for(auto it = fracEdges.begin(); it != fracEdges.end(); it++) //iterate over the sorted edges
 	{

@@ -375,22 +375,32 @@ int main(int argc, char **argv)
 	c.sort_out_degrees();
 	//c.displayOutdegree(g);
 	c.reassign_communities();
-	double new_modularity, prev_modularity;
+	double new_modularity, prev_modularity, best_modularity = 0;
 	WeightedGraph new_wg = c.rebuild_graph(finalEdges);
+	int decrease = 0;
 
 	while(1)
 	{
-		prev_modularity = wg.modularity(g);
+		//prev_modularity = wg.modularity(g); unnecessary
 		new_modularity = new_wg.modularity(g);
 
 		if(new_modularity > prev_modularity)
 		{
 			prev_modularity = new_modularity;
-			wg = c.rebuild_graph(finalEdges);
+			decrease = 0;
+			if(new_modularity > best_modularity)
+			{
+				best_modularity = new_modularity;
+				wg = c.rebuild_graph(finalEdges);
+			}
 		}
 		else
 		{
-			break;
+			++decrease;
+			if(decrease > p.max_decrease)
+			{
+				break;
+			}
 		}
 
 		c.reset_degrees();
@@ -435,11 +445,30 @@ int main(int argc, char **argv)
 
 	wg.mergeClusters(fracEdges, p);
 
+	for(int i = 0; i < wg.num_vertices; i++)
+	{
+		if((wg.vertex[i].id != i) || (wg.vertex[i].origNodes.size() == 0))
+			continue;
+
+		for(auto it = wg.vertex[i].origNodes.begin(); it != wg.vertex[i].origNodes.end(); it++)
+		{
+			c.n2c[*it] = i;
+		}
+	}
+
+	c.reset_degrees();
+	c.recalc_degrees(finalEdges);
+	c.sort_out_degrees();
+	/*c.reassign_communities();
+	wg = c.rebuild_graph(finalEdges);*/
+
 	wg.displayGraph();
 
 	cout <<"\n\n";
 
 	cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
+
+	//c.displayOutdegree(g);
 
 	//write_partition(outputFile, new_wg, g);
 

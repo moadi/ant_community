@@ -7,6 +7,7 @@
 #include <cmath>
 #include <fstream>
 
+//#include "community.h"
 #include "graph.h"
 #include "parameters.h"
 
