@@ -1,5 +1,7 @@
 #include "community.h"
 
+
+
 struct greater_than_key
 {
 	inline bool operator() (const pair<int, int>& p1, const pair<int, int>& p2)
@@ -21,6 +23,8 @@ Community::Community(Graph& graph)
 	out_degree.resize(graph.num_vertices);
 
 	tot_out.resize(graph.num_vertices, 0);
+
+	delta.resize(graph.num_vertices);
 
 	for(int i = 0; i < graph.num_vertices; i++)
 	{
@@ -196,8 +200,9 @@ void Community::displayOutdegree(Graph& g)
 		cout << "Degree of " << it->first + 1 << " = " << g.vertex[it->first].degree << "  In = " << in_degree[it->first] << "  Out = " << tot_out[it->first] << "\n\n";
 		for(auto it2 = out_degree[it->first].begin(); it2 != out_degree[it->first].end(); it2++)
 		{
-			cout << " [ " << it2->first << ", " << it2->second << " ]   ";
+			cout << " [ " << it2->first << ", " << it2->second << " ]     ";
 		}
+		cout << delta[it->first];
 		cout << "\n\n";
 	}
 }
@@ -213,6 +218,8 @@ void Community::sort_out_degrees()
 	std::sort(out_degrees.begin(), out_degrees.end(), greater_than_key());
 }
 
+
+
 void Community::reassign_communities()
 {
 	//loop through the nodes in decreasing order of out degrees to different clusters
@@ -220,6 +227,10 @@ void Community::reassign_communities()
 	nodes_replaced = 0;
 	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
 	{
+		if(delta[it->first] > 0)
+		{
+			continue;
+		}
 		int cluster; //cluster to which this node has max out degree
 		int max_out_degree = 0; //stores the max outdegree
 
@@ -239,6 +250,261 @@ void Community::reassign_communities()
 			//cout << "New cluster for node " << it->first + 1 << " =  " << cluster << endl << endl;
 			++nodes_replaced;
 			n2c[it->first] = cluster;
+		}
+	}
+	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+}
+
+void Community::reassign_communities(ClusterTabuList* tabu_list)
+{
+	//loop through the nodes in decreasing order of out degrees to different clusters
+	int num = 0;
+	nodes_replaced = 0;
+	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
+	{
+		if(delta[it->first] > 0)
+		{
+			continue;
+		}
+		int new_cluster; //cluster to which this node has max out degree
+		int max_out_degree = 0; //stores the max outdegree
+		int curr_cluster = n2c[it->first];
+
+		//get the cluster to which it has the max out degree
+		for(auto it2 = out_degree[it->first].begin(); it2 != out_degree[it->first].end(); it2++)
+		{
+			int cluster = n2c[it2->first];
+			if(tabu_list[it->first].searchList(cluster) == true)
+			{
+				continue;
+			}
+			if(it2->second > max_out_degree) //if the out degree to this cluster is greater, then use this
+			{
+				max_out_degree = it2->second;
+				new_cluster = it2->first;
+			}
+		}
+		//if the vertex out degree to the cluster is greater than
+		//its in degree, then reassign
+		if(max_out_degree > in_degree[it->first])
+		{
+			//cout << "New cluster for node " << it->first + 1 << " =  " << cluster << endl << endl;
+			++nodes_replaced;
+			tabu_list[it->first].addToList(curr_cluster);
+			n2c[it->first] = new_cluster;
+		}
+	}
+	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+}
+
+void Community::reassign_communities_sigmoid(Helper& h)
+{
+	//loop through the nodes in decreasing order of out degrees to different clusters
+	int num = 0;
+	nodes_replaced = 0;
+	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
+	{
+		if(delta[it->first] > 0)
+		{
+			continue;
+		}
+		int cluster; //cluster to which this node has max out degree
+		int max_out_degree = 0; //stores the max outdegree
+
+		//get the cluster to which it has the max out degree
+		for(auto it2 = out_degree[it->first].begin(); it2 != out_degree[it->first].end(); it2++)
+		{
+			if(it2->second > max_out_degree) //if the out degree to this cluster is greater, then use this
+			{
+				max_out_degree = it2->second;
+				cluster = it2->first;
+			}
+		}
+		//if the vertex out degree to the cluster is greater than
+		//its in degree, then reassign
+		if(max_out_degree > in_degree[it->first])
+		{
+			int delta = in_degree[it->first] - max_out_degree;
+			double sigmoid_value = (double) (1 / (1 + exp(-delta)) );
+			double prob = h.probability();
+			if(prob > sigmoid_value)
+			{
+				++nodes_replaced;
+				n2c[it->first] = cluster;
+			}
+		}
+	}
+	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+}
+
+
+void Community::reassign_communities_sigmoid(Helper& h, ClusterTabuList* tabu_list)
+{
+	//loop through the nodes in decreasing order of out degrees to different clusters
+	int num = 0;
+	nodes_replaced = 0;
+	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
+	{
+		if(delta[it->first] > 0)
+		{
+			continue;
+		}
+		int new_cluster; //cluster to which this node has max out degree
+		int max_out_degree = 0; //stores the max outdegree
+		int curr_cluster = n2c[it->first];
+
+		//get the cluster to which it has the max out degree
+		for(auto it2 = out_degree[it->first].begin(); it2 != out_degree[it->first].end(); it2++)
+		{
+			int cluster = n2c[it2->first];
+			if(tabu_list[it->first].searchList(cluster) == true)
+			{
+				continue;
+			}
+
+			if(it2->second > max_out_degree) //if the out degree to this cluster is greater, then use this
+			{
+				max_out_degree = it2->second;
+				new_cluster = it2->first;
+			}
+		}
+		//if the vertex out degree to the cluster is greater than
+		//its in degree, then reassign
+		if(max_out_degree > in_degree[it->first])
+		{
+			int delta = in_degree[it->first] - max_out_degree;
+			double sigmoid_value = (double) (1 / (1 + exp(-delta)) );
+			double prob = h.probability();
+			if(prob > sigmoid_value)
+			{
+				++nodes_replaced;
+				n2c[it->first] = new_cluster;
+			}
+		}
+
+	}
+	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+}
+
+
+void Community::reassign_communities(Graph& g)
+{
+	//loop through the nodes in decreasing order of out degrees to different clusters
+	int num = 0;
+	nodes_replaced = 0;
+	for(auto it = out_degrees.begin(); it != out_degrees.end(); it++)
+	{
+		if(delta[it->first] > 0)
+		{
+			continue;
+		}
+		int cluster; //cluster to which this node has max out degree
+		int max_out_degree = 0; //stores the max outdegree
+
+		//get the cluster to which it has the max out degree
+		for(auto it2 = out_degree[it->first].begin(); it2 != out_degree[it->first].end(); it2++)
+		{
+			if(it2->second > max_out_degree) //if the out degree to this cluster is greater, then use this
+			{
+				max_out_degree = it2->second;
+				cluster = it2->first;
+			}
+		}
+		//if the vertex out degree to the cluster is greater than
+		//its in degree, then reassign
+		if(max_out_degree > in_degree[it->first])
+		{
+			//cout << "New cluster for node " << it->first + 1 << " =  " << cluster << endl << endl;
+			++nodes_replaced;
+			int prev_cluster = n2c[it->first];
+
+			// change it's cluster
+			n2c[it->first] = cluster;
+
+			//update it's neighbors
+			int n = it->first;
+			for(int i = 0; i < g.vertex[n].degree; i++)
+			{
+				int neighbor = g.vertex[n].neighbors[i];
+				int neighbor_cluster = n2c[neighbor];
+
+				// if neighbor is in the previous cluster
+				if(prev_cluster == neighbor_cluster)
+				{
+					// check if neighbor is connected to the node's new cluster
+					auto out_degree_it = out_degree[neighbor].find(cluster);
+					if(out_degree_it == out_degree[neighbor].end()) // if not
+					{
+						// update out_degree and in_degree
+						out_degree[neighbor].insert(make_pair(cluster, 1));
+						--in_degree[neighbor];
+					}
+				}
+				// if neighbor is in the new cluster
+				else if(neighbor_cluster == cluster)
+				{
+					//reduce out_degree to previous cluster and increment in_degree
+					auto out_degree_it = out_degree[neighbor].find(prev_cluster);
+					if(out_degree_it == out_degree[neighbor].end())
+					{
+						// do nothing
+					}
+					else
+					{
+						--out_degree_it->second;
+						++in_degree[neighbor];
+					}
+
+				}
+				// different clusters
+				else
+				{
+					auto out_degree_it = out_degree[neighbor].find(cluster);
+					if(out_degree_it == out_degree[neighbor].end()) // if not
+					{
+						// update out_degree and in_degree
+						out_degree[neighbor].insert(make_pair(cluster, 1));
+					}
+					else
+					{
+						// increment out_degree to new cluster
+						++out_degree_it->second;
+
+						// decrement out_degree to previous cluster
+						auto out_degree_it_2 = out_degree[neighbor].find(prev_cluster);
+						--out_degree_it->second;
+					}
+				}
+			}
+
+			//reset its degrees
+			in_degree[n] = 0;
+			tot_out[n] = 0;
+			out_degree[n].clear();
+
+			// recalculate its in and out_degrees
+			for(int i = 0; i < g.vertex[n].degree; i++)
+			{
+				int neighbor = g.vertex[n].neighbors[i];
+				// if neighbor is in the same cluster
+				if(n2c[neighbor] == n2c[n])
+				{
+					++in_degree[n];
+				}
+				else
+				{
+					// check if node is connected to the cluster
+					auto out_degree_it = out_degree[n].find(n2c[neighbor]);
+					if(out_degree_it == out_degree[n].end()) // if not
+					{
+						out_degree[n].insert(make_pair(n2c[neighbor], 1));
+					}
+					else
+					{
+						++out_degree_it->second;
+					}
+				}
+			}
 		}
 	}
 	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
@@ -357,6 +623,7 @@ WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)
 			it++;
 		}
 	}*/
+
 	return wg;
 }
 
@@ -479,6 +746,51 @@ void Community::recalc_degrees(std::vector<Edge>& edges)
 				tot_out[b]++;
 			}
 
+		}
+	}
+	//Calculate delta for each vertex, delta = indegree - outdegree
+	for(unsigned int i = 0; i < tot_out.size(); ++i)
+	{
+		delta[i] = in_degree[i] - tot_out[i];
+	}
+}
+
+void Community::recalc_degrees(std::vector<int>& nodes, Graph& g)
+{
+	for(auto it = nodes.begin(); it != nodes.end(); ++it)
+	{
+		// clear it's degrees
+		in_degree[*it] = 0;
+		out_degree[*it].clear();
+		tot_out[*it] = 0;
+
+		// for each adjacent node to the current node
+		for(int i = 0; i < g.vertex[*it].degree; ++i)
+		{
+			int neighbor = g.vertex[*it].neighbors[i];
+
+			// if they are in the same community
+			if(n2c[*it] == n2c[neighbor])
+			{
+				++in_degree[*it];
+			}
+
+			else
+			{
+				auto out_deg_it = out_degree[*it].find(n2c[neighbor]);
+
+				// if this edge is encountered the first time
+				if(out_deg_it == out_degree[*it].end())
+				{
+					out_degree[*it].insert(make_pair(n2c[neighbor], 1)); // insert into the out_degree map
+					++tot_out[*it];
+				}
+				else
+				{
+					++out_deg_it->second;
+					++tot_out[*it];
+				}
+			}
 		}
 	}
 }

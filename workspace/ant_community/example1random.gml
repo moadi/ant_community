@@ -4,6 +4,7 @@ Created by Peter Ronhovde
 "A purely random graph given density p = 0.18075"
 graph
 [
+  directed 0
   node
   [
     id 0

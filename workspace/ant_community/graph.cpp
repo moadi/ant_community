@@ -87,7 +87,7 @@ Graph::Graph(char * fileName)
 		{
 			getline(fin, line);
 			string id_text;
-			if(string::npos != line.find("Edges"))
+			if(string::npos != line.find("Edges") || string::npos != line.find("Arcs"))
 				break;
 			/*int start_pos = line.find("\"");
 			int id;

@@ -11,7 +11,10 @@
 #include "graph.h"
 #include "parameters.h"
 
+
 using namespace std;
+
+//class Community;
 
 class WeightedVertex
 {
@@ -47,6 +50,7 @@ class WeightedGraph
 		std::vector<WeightedVertex> vertex;
 		WeightedEdges edges;
 		std::unordered_map<pair<int, int>, double > edgeTotal;
+		bool found; // checks to see if a clique has been found
 
 		//WeightedGraph(int, std::unordered_map<pair<int, int>, double >*, std::unordered_map<pair<int, int>, int >*);
 
@@ -65,6 +69,14 @@ class WeightedGraph
 		void mergeNodes(int, int);
 
 		void displayFrac();
+
+		void copy_graph(WeightedGraph&); //used to save the best partition found so far
+
+		void finalize();
+
+		//void split_clusters(Graph&, Community&); // looks for well connected components within a cluster to break it up
+
+		//void build_clique(vector<int>&, Graph&, Community&, int);
 };
 
 #endif /* WEIGHTED_GRAPH_H_ */

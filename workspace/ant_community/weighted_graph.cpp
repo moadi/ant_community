@@ -1,5 +1,7 @@
 #include "weighted_graph.h"
 
+
+
 /*WeightedGraph::WeightedGraph(int num_vertices, std::unordered_map<pair<int, int>, double >* out_phm, std::unordered_map<pair<int, int>, int >* edges_cross)
 {
 	this->num_vertices = num_vertices;
@@ -13,7 +15,6 @@
 	num_vertices = 0;
 	vertex.resize(graph.num_vertices);
 }*/
-
 void WeightedGraph::displayGraph()
 {
 	std::unordered_map<pair<int, int>, int >::iterator cross_edges_it;
@@ -24,7 +25,7 @@ void WeightedGraph::displayGraph()
 	for(int i = 0; i < num_vertices; i++)
 	{
 		//if this cluster has been merged or all it's members reassigned , ignore
-		if((vertex[i].id != i) || (vertex[i].origNodes.size() == 0))
+		if((vertex[i].origNodes.size() == 0)) //(vertex[i].id != i) || )
 					continue;
 
 		++clusters;
@@ -92,7 +93,21 @@ void WeightedGraph::displayGraph()
 		fout << *it;
 		fout << "\n";
 	}
+	std::vector<int> community_sizes;
+	ofstream community("/home/mua193/Desktop/community_sizes.dat");
+	for(int i = 0; i < num_vertices; i++)
+	{
+		if((vertex[i].origNodes.size() == 0)) //(vertex[i].id != i) || )
+			continue;
 
+		community_sizes.push_back(vertex[i].origNodes.size());
+	}
+	std::sort(community_sizes.begin(), community_sizes.end(), std::greater<int>());
+	for(auto it = community_sizes.begin(); it != community_sizes.end(); ++it)
+	{
+		community << *it << "\n";
+	}
+	community.close();
 	fout.close();
 }
 
@@ -118,6 +133,10 @@ void WeightedGraph::calc_edge_total()
 				edge = make_pair(vertex[i].neighbors[j], i);
 			}
 			edge_weight = edges.cross_phm.find(edge);
+			if(edge_weight == edges.cross_phm.end()) //if this edge does not exist
+			{
+				continue;
+			}
 			frac = edge_weight->second / vertex[i].total;
 			edge_frac = edgeTotal.find(edge);
 			if(edge_frac == edgeTotal.end()) //if this is the first time this is being inserted
@@ -175,7 +194,7 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 	edges.cross_edges.erase(n1_n2);
 	edges.cross_phm.erase(n1_n2);
 
-	//invalidate this vertex (NEEDS TO BE CHANGED LATER)
+	//invalidate this vertex so we know it has been merged
 	vertex[node2].id = node1;
 
 	//iterate over the neighbors of node2 to update the graph
@@ -283,8 +302,8 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 		int node2 = it->first.second;
 
 		//if any node has already been merged with another then skip
-		/*if(vertex[node1].id == -1 || vertex[node2].id == -1)
-			continue;*/
+		if(vertex[node1].id == -1 || vertex[node2].id == -1)
+			continue;
 
 		if(vertex[node1].id != node1)
 		{
@@ -299,7 +318,7 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 		node1_frac = vertex[node1].weight / vertex[node1].total;
 		node2_frac = vertex[node2].weight / vertex[node2].total;
 
-		//CHANGE HERE, SEE IT LATER!!
+
 		//if both nodes are very well connected inside, don't merge
 		if((node1_frac >= p.threshold) && (node2_frac >= p.threshold))
 		{
@@ -347,6 +366,53 @@ void WeightedGraph::mergeClusters(std::vector<pair<pair<int, int>, double > >& f
 	}
 }
 
+void WeightedGraph::finalize()
+{
+	for(int i = 0; i < num_vertices; i++)
+		{
+		if(vertex[i].origNodes.size() == 0)
+		{
+			continue;
+		}
+		int cluster, max_out_degree = 0;
+			for(unsigned int j = 0; j < vertex[i].neighbors.size(); j++)
+			{
+				pair<int, int> edge;
+				if(i < vertex[i].neighbors[j])
+				{
+					edge = make_pair(i, vertex[i].neighbors[j]);
+				}
+				else
+				{
+					edge = make_pair(vertex[i].neighbors[j], i);
+				}
+				auto it = edges.cross_edges.find(edge);
+				if(it == edges.cross_edges.end())
+					continue;
+				int crossing_edges = it->second;
+				if(crossing_edges > max_out_degree)
+				{
+					cluster = vertex[i].neighbors[j];
+					max_out_degree = crossing_edges;
+				}
+				if(max_out_degree > vertex[i].in_links)
+				{
+					//if node1 has more elements
+					if(vertex[i].origNodes.size() > vertex[cluster].origNodes.size())
+					{
+						mergeNodes(i, cluster);
+						cout << "Merging nodes " << i << " and " << cluster << "\n\n";
+					}
+					else //node2 has more elements
+					{
+						mergeNodes(cluster, i);
+						cout << "Merging nodes " << i << " and " << cluster << "\n\n";
+					}
+				}
+			}
+		}
+}
+
 void WeightedGraph::displayFrac()
 {
 	cout << "\n";
@@ -374,4 +440,52 @@ double WeightedGraph::modularity(Graph& g)
 		q += ( ((double) vertex[i].in_links / g.num_edges) - (pow(d, 2)));
 	}
 	return q;
+}
+
+void WeightedGraph::copy_graph(WeightedGraph& wg)
+{
+	num_vertices = wg.num_vertices;
+	vertex.resize(num_vertices);
+	edges.cross_edges.reserve(wg.edges.cross_edges.size());
+	edges.cross_phm.reserve(wg.edges.cross_phm.size());
+
+	for(int i = 0; i < num_vertices; i++)
+	{
+		vertex[i].id = wg.vertex[i].id;
+		if((wg.vertex[i].id != i) || (wg.vertex[i].origNodes.size() == 0))
+		{
+			continue;
+		}
+
+		//copy vertex attributes
+		vertex[i].degree = wg.vertex[i].degree;
+		vertex[i].in_links = wg.vertex[i].in_links;
+		vertex[i].total = wg.vertex[i].total;
+		vertex[i].weight = wg.vertex[i].weight;
+
+		//copy vertex neighbors
+		for(unsigned int j = 0; j < wg.vertex[i].neighbors.size(); j++)
+		{
+			vertex[i].neighbors.push_back(wg.vertex[i].neighbors[j]);
+		}
+
+		//copy original nodes
+		for(unsigned int j = 0; j < wg.vertex[i].origNodes.size(); j++)
+		{
+			vertex[i].origNodes.push_back(wg.vertex[i].origNodes[j]);
+		}
+
+	} //vertex information completed
+
+	//copy edge information
+	for(auto it = wg.edges.cross_edges.begin(); it != wg.edges.cross_edges.end(); it++)
+	{
+		edges.cross_edges.insert(make_pair(it->first, it->second));
+	}
+
+	//copy edge information
+	for(auto it = wg.edges.cross_phm.begin(); it != wg.edges.cross_phm.end(); it++)
+	{
+		edges.cross_phm.insert(make_pair(it->first, it->second));
+	}
 }

@@ -16,7 +16,7 @@ class TabuList
 		bool searchList(int);
 		void displayList();
 		void clearList();
-		//~TabuList();
+		~TabuList();
 };
 
 

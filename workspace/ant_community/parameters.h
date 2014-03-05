@@ -3,6 +3,7 @@
 
 #include "graph.h"
 
+
 class Parameters
 {
 	public:
@@ -10,11 +11,11 @@ class Parameters
 		int maxIterations;
 		int maxSteps;
 		int maxTries; //max number of times ant tries to move
-		int updatePeriod; //number of cycle after which to update pheromone
+		int updatePeriod; //number of cycles after which to update pheromone
 		double threshold; //sets how well connected a cluster is
 		int max_decrease; // maximum number of times the modularity drops
 
-		Parameters(Graph &g)
+		Parameters(Graph& g)
 		{
 			if(g.num_vertices > 113)
 			{
@@ -36,7 +37,7 @@ class Parameters
 			cout << "Percentage of links = " << p << "\n\n";
 			if (p < 0.100)
 			{
-				threshold = 0.90;
+				threshold = 0.80;
 			}
 			else if(p >= 1)
 			{
@@ -47,12 +48,12 @@ class Parameters
 				threshold = 0.35;
 			}
 
-			//added as a check
-			if(g.num_vertices < 128)
+			// if graph is really small
+			if(g.num_vertices <= 128)
 			{
 				threshold = 0.5;
 			}
-			max_decrease = 7;
+			max_decrease = 5;
 		}
 };
 

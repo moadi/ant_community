@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../cluster_tabu_list.cpp \
 ../community.cpp \
 ../driver.cpp \
 ../graph.cpp \
@@ -11,6 +12,7 @@ CPP_SRCS += \
 ../weighted_graph.cpp 
 
 OBJS += \
+./cluster_tabu_list.o \
 ./community.o \
 ./driver.o \
 ./graph.o \
@@ -18,6 +20,7 @@ OBJS += \
 ./weighted_graph.o 
 
 CPP_DEPS += \
+./cluster_tabu_list.d \
 ./community.d \
 ./driver.d \
 ./graph.d \

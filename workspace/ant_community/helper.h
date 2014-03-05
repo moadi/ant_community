@@ -2,7 +2,8 @@
 #define HELPER_H_
 
 #include <random>
-
+#include <cmath>
+//#include <chrono>
 
 class Helper
 {
@@ -10,10 +11,13 @@ class Helper
 		std::random_device rd;
 		std::mt19937 gen;
 		int num_vertices;
+		unsigned long seed;
 
-		Helper(Graph &graph)
+		Helper(Graph& graph)
 		{
-			gen.seed(rd());
+			seed = rd();
+			//seed = 2103890547;
+			gen.seed(seed);
 			num_vertices = graph.num_vertices;
 		}
 

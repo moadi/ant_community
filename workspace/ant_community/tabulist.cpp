@@ -10,7 +10,7 @@
 TabuList::TabuList()
 {
 	vertex_id = new int[LIST_SIZE];
-	for(int i=0; i < LIST_SIZE; i++)
+	for(int i = 0; i < LIST_SIZE; i++)
 		vertex_id[i] = -1;
 	head = 0;
 }
@@ -45,4 +45,9 @@ void TabuList::clearList()
 	for(int i=0; i < LIST_SIZE; i++)
 		vertex_id[i] = -1;
 	head = 0;
+}
+
+TabuList::~TabuList()
+{
+	delete[] vertex_id;
 }

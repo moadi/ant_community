@@ -1,16 +1,11 @@
-/*
- * driver.cpp
- *
- *  Created on: Jun 20, 2013
- *      Author: muddy
- */
-
 #include "community.h"
 #include "graph.h"
 #include "tabulist.h"
 #include "ant.h"
 #include "helper.h"
 #include "parameters.h"
+#include "cluster_tabu_list.h"
+//#include "weighted_graph.h"
 
 
 #include <iostream>
@@ -25,14 +20,24 @@
 
 using namespace std;
 
-//int maxSteps;
-//int updatePeriod;
+
 double eta = 0.5;
 double minPhm = 1;
 char * outputFile = NULL;
 char * inputFile = NULL;
+bool found = false; // check if clique is found
 
 void calcNeighborhoodSize(Graph*); //function to calculate intersection size for each vertex with it's neighbors
+
+void split_clusters(WeightedGraph&, Community&, Graph&);
+
+void build_clique(vector<int>&, Graph&, Community&, int&);
+
+bool check_connectivity(vector<int>&, Graph&);
+
+void expand_clique(WeightedGraph&, vector<int>&, Graph&, Community&, int&);
+
+void finalize(WeightedGraph&, Community&);
 
 struct greater_than_key
 {
@@ -53,6 +58,14 @@ struct less_than_key
 struct greater_than_key_2
 {
 	inline bool operator() (const pair<pair<int, int>, double >& p1, const pair<pair<int, int>, double >& p2)
+	{
+		return p1.second > p2.second;
+	}
+};
+
+struct greater_than_key_3
+{
+	inline bool operator() (const pair<int, int>& p1, const pair<int, int>& p2)
 	{
 		return p1.second > p2.second;
 	}
@@ -112,7 +125,7 @@ int chooseNext(Ant* ant, Graph* g, Helper& helper)
 	double decision = helper.randomNumber();
 
 	//Choose the next vertex for the ant
-	int vertex; //result
+	int vertex;// = ant->location.neighbors[0]; //result
 	double fitness = 0;
 	bool chosen = false;
 	for(int i=0; i < ant->location.degree && !chosen; i++)
@@ -214,16 +227,15 @@ void antsMove(Ant * ants, Graph * g, Helper& helper, Parameters& p)
 		//for all ants update their positions if possible
 		for(int i = 0; i < g->num_vertices; i++)
 		{
+			if(ants[i].location.degree == 0) continue;
 			int cur_vertex = ants[i].location.id;
-			ants[i].tabulist.addToList(cur_vertex);
+			ants[i].tabulist.addToList(cur_vertex); // add current vertex to tabu list
 			int numTries = 0;
 			moved = false;
 			while(numTries < p.maxTries && !moved)
 			{
 				int next_vertex = chooseNext(&ants[i], g, helper);
-
 				//if the next vertex if not in the tabulist, then move the ant
-
 				if(ants[i].tabulist.searchList(next_vertex) == false)// || ants[i].location.degree <= 2  )
 				{
 					ants[i].location = g->vertex[next_vertex];
@@ -232,13 +244,27 @@ void antsMove(Ant * ants, Graph * g, Helper& helper, Parameters& p)
 					{
 						edge = make_pair(cur_vertex, next_vertex);
 						edge_it = g->edges.find(edge);
-						edge_it->second.nVisited++;
+						if(edge_it == g->edges.end())
+						{
+							// do nothing
+						}
+						else
+						{
+							edge_it->second.nVisited++;
+						}
 					}
 					else
 					{
 						edge = make_pair(next_vertex, cur_vertex);
 						edge_it = g->edges.find(edge);
-						edge_it->second.nVisited++;
+						if(edge_it == g->edges.end())
+						{
+							// do nothing
+						}
+						else
+						{
+							edge_it->second.nVisited++;
+						}
 					}
 				}
 				else
@@ -311,9 +337,9 @@ int main(int argc, char **argv)
 
 	start = clock();
 
-	cout<<"Finalizing 1-hop neighborhood...\n\n";
+	//cout<<"Finalizing 1-hop neighborhood...\n\n";
 
-	//sort the adjacent nodes for each vertex to compute intersection easily
+	// sort the adjacent nodes for each vertex to compute intersection
 	for(int i=0; i < g.num_vertices; i++)
 		std::sort(g.vertex[i].neighbors, g.vertex[i].neighbors + g.vertex[i].degree);
 
@@ -331,9 +357,9 @@ int main(int argc, char **argv)
 		ants[i].location = g.vertex[i];
 	}
 
-	cout<<"The total number of edges is = "<< g.num_edges<<"\n\n";
+	cout<<"Total number of edges = " << g.num_edges << "\n\n";
 
-	cout<<"The number of vertices is = "<< g.num_vertices<<"\n\n";
+	cout<<"Number of vertices = " << g.num_vertices << "\n\n";
 
 	Parameters p(g);
 
@@ -367,122 +393,525 @@ int main(int argc, char **argv)
 	delete[] ants; //remove the ants
 	cout << "\n";
 
+
+	/*
+	 * Begin local optimization
+	 */
 	Community c(g);
 	WeightedGraph wg = c.partition_one_level(g, finalEdges);
-
 	cout << "Modularity of initial partition = " << wg.modularity(g) << "\n\n";
 
-	c.sort_out_degrees();
-	//c.displayOutdegree(g);
-	c.reassign_communities();
-	double new_modularity, prev_modularity, best_modularity = 0;
-	WeightedGraph new_wg = c.rebuild_graph(finalEdges);
-	int decrease = 0;
 
-	while(1)
+	WeightedGraph best_wg; //keeps track of the best partition so far
+
+
+	TabuList * perturb_tabu_list = new TabuList[g.num_vertices]; //tabu list for each vertex, we don't want to reassign to the same cluster
+
+	ClusterTabuList* cluster_tabu_list = new ClusterTabuList[g.num_vertices];
+
+	double new_modularity, prev_modularity, best_modularity; //keeps track of modularity
+
+	/*
+	 * Initialize all the modularities
+	 */
+	prev_modularity = wg.modularity(g);
+	best_modularity = prev_modularity;
+
+	int decrease = 0, round_one_decrease = 0, final_decrease = 0; // keeps track of number of rounds without improvement
+
+//	c.reset_degrees();
+//	c.recalc_degrees(finalEdges);
+//	c.sort_out_degrees();
+
+	while(final_decrease < p.max_decrease)
 	{
-		//prev_modularity = wg.modularity(g); unnecessary
-		new_modularity = new_wg.modularity(g);
-
-		if(new_modularity > prev_modularity)
+		while(round_one_decrease < p.max_decrease)
 		{
-			prev_modularity = new_modularity;
-			decrease = 0;
-			if(new_modularity > best_modularity)
-			{
-				best_modularity = new_modularity;
+				while(decrease < p.max_decrease)
+				{
+					c.reset_degrees();
+					c.recalc_degrees(finalEdges);
+					c.sort_out_degrees();
+					c.reassign_communities();
+					//c.reassign_communities(cluster_tabu_list);
+					//c.reassign_communities_sigmoid(helper);
+					//c.reassign_communities_sigmoid(helper, cluster_tabu_list);
+					wg = c.rebuild_graph(finalEdges);
+
+					new_modularity = wg.modularity(g);
+
+					if(new_modularity > prev_modularity)
+					{
+						prev_modularity = new_modularity;
+						if(new_modularity > best_modularity)
+						{
+							best_wg = c.rebuild_graph(finalEdges);
+							best_modularity = new_modularity;
+						}
+					}
+					else
+					{
+						prev_modularity = new_modularity;
+						++decrease;
+					}
+				}
+
+				//best_wg.displayGraph();
+
+				decrease = 0;
+
+				// set the cluster assignments to the best wg
+				for(int i = 0; i < best_wg.num_vertices; ++i)
+				{
+					if((best_wg.vertex[i].id != i) || (best_wg.vertex[i].origNodes.size() == 0))
+									continue;
+
+					for(auto it = best_wg.vertex[i].origNodes.begin(); it != best_wg.vertex[i].origNodes.end(); it++)
+					{
+						c.n2c[*it] = i;
+					}
+				}
+				best_modularity = best_wg.modularity(g);
+				wg = c.rebuild_graph(finalEdges); // store the best graph so far in wg
+
+				//merging step
+				wg.calc_edge_total();
+				std::vector<pair<pair<int, int>, double > > fracEdges;
+				fracEdges.resize(wg.edgeTotal.size());
+				for(auto it = wg.edgeTotal.begin(); it != wg.edgeTotal.end(); it++)
+				{
+					pair<int, int> edge = it->first;
+					double frac = it->second;
+					pair<pair<int, int>, double > frac_edge(edge, frac);
+					fracEdges.push_back(frac_edge);
+				}
+				std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
+				wg.mergeClusters(fracEdges, p); //merge the clusters
+
+				// if there is an improvement, save it to the final_best_wg
+				new_modularity = wg.modularity(g);
+				if(new_modularity > best_modularity)
+				{
+					//change cluster assignments to wg as it's better
+					for(int i = 0; i < wg.num_vertices; i++)
+					{
+						if((wg.vertex[i].id != i) || (wg.vertex[i].origNodes.size() == 0))
+							continue;
+
+						for(auto it = wg.vertex[i].origNodes.begin(); it != wg.vertex[i].origNodes.end(); it++)
+						{
+							c.n2c[*it] = i;
+						}
+					}
+
+					best_modularity = new_modularity;
+					best_wg = c.rebuild_graph(finalEdges);
+				}
+
+				c.reset_degrees();
+				c.recalc_degrees(finalEdges);
+
+				/*
+				 * Perturb the best wg
+				 */
+
+				//consider reassigning only those nodes with delta in specified range
+				for(int i = 0; i < g.num_vertices; i++)
+				{
+					int max_out_degree = 0;
+					int cluster;
+					//if the range matches
+					if((c.delta[i] > 0) && (c.delta[i] <= 2))
+					{
+						for(auto it = c.out_degree[i].begin(); it != c.out_degree[i].end(); it++)
+						{
+							cluster = it->first;
+							//if this cluster had been previously considered
+							if(perturb_tabu_list[i].searchList(cluster) == true)
+								continue; //skip
+
+							if(max_out_degree < 2*abs(c.delta[i]))
+								continue;
+
+							if(it->second > max_out_degree)
+							{
+								cluster = it->first;
+								max_out_degree = it->second;
+							}
+						}
+
+						perturb_tabu_list[i].addToList(c.n2c[i]); //add current_cluster to tabu list
+						if(cluster_tabu_list[i].searchList(c.n2c[i]) == false)
+						{
+							cluster_tabu_list[i].addToList(c.n2c[i]);
+						}
+						c.n2c[i] = cluster;
+						//cout << "Replacing...." << "\n\n";
+					}
+				}
+
+				// recompute the degrees because reassigning clusters might change that
+				c.reset_degrees();
+				c.recalc_degrees(finalEdges);
+
 				wg = c.rebuild_graph(finalEdges);
+				new_modularity = wg.modularity(g);
+
+				// check for improvement
+				if(new_modularity > best_modularity) // just change to check
+				{
+					best_modularity = new_modularity;
+					best_wg = c.rebuild_graph(finalEdges);
+				}
+				else
+				{
+					++round_one_decrease;
+					prev_modularity = new_modularity;
+				}
+		} // round one of local optimization is complete
+		round_one_decrease = 0;
+
+		// reassign cluster assignments to final_best_wg
+		for(int i = 0; i < best_wg.num_vertices; i++)
+		{
+			if((best_wg.vertex[i].id != i) || (best_wg.vertex[i].origNodes.size() == 0))
+				continue;
+
+			for(auto it = best_wg.vertex[i].origNodes.begin(); it != best_wg.vertex[i].origNodes.end(); it++)
+			{
+				c.n2c[*it] = i;
 			}
+		}
+
+		wg = c.rebuild_graph(finalEdges);
+
+		// try splitting the best_wg
+		split_clusters(wg, c, g);
+		c.reset_degrees();
+		c.recalc_degrees(finalEdges);
+		wg = c.rebuild_graph(finalEdges);
+		new_modularity = wg.modularity(g);
+
+		// check if splitting improves the solution
+		if(new_modularity > best_modularity)
+		{
+			best_wg = c.rebuild_graph(finalEdges);
+			best_modularity = new_modularity;
 		}
 		else
 		{
-			++decrease;
-			if(decrease > p.max_decrease)
-			{
-				break;
-			}
-		}
-
-		c.reset_degrees();
-		c.recalc_degrees(finalEdges);
-		c.sort_out_degrees();
-		c.reassign_communities();
-		new_wg = c.rebuild_graph(finalEdges);
-	}
-
-	/*while(c.nodes_replaced > 10)
-	{
-		c.reset_degrees();
-		c.recalc_degrees(finalEdges);
-		c.sort_out_degrees();
-		c.reassign_communities();
-		wg = c.rebuild_graph(finalEdges);
-	}*/
-
-	//WeightedGraph new_wg = c.rebuild_graph(finalEdges);
-
-	cout << "\n\n";
-
-	//new_wg.displayGraph();
-
-	wg.calc_edge_total();
-
-	std::vector<pair<pair<int, int>, double > > fracEdges;
-
-	fracEdges.resize(wg.edgeTotal.size());
-
-	for(auto it = wg.edgeTotal.begin(); it != wg.edgeTotal.end(); it++)
-	{
-		pair<int, int> edge = it->first;
-		double frac = it->second;
-		pair<pair<int, int>, double > frac_edge(edge, frac);
-		fracEdges.push_back(frac_edge);
-	}
-
-	std::sort(fracEdges.begin(), fracEdges.end(), greater_than_key_2());
-
-	cout << "Modularity of new partition = " << wg.modularity(g) << "\n\n";
-
-	wg.mergeClusters(fracEdges, p);
-
-	for(int i = 0; i < wg.num_vertices; i++)
-	{
-		if((wg.vertex[i].id != i) || (wg.vertex[i].origNodes.size() == 0))
-			continue;
-
-		for(auto it = wg.vertex[i].origNodes.begin(); it != wg.vertex[i].origNodes.end(); it++)
-		{
-			c.n2c[*it] = i;
+			++final_decrease;
 		}
 	}
 
-	c.reset_degrees();
-	c.recalc_degrees(finalEdges);
-	c.sort_out_degrees();
-	/*c.reassign_communities();
-	wg = c.rebuild_graph(finalEdges);*/
+	best_wg.displayGraph();
 
-	wg.displayGraph();
+	cout << "Modularity of final partition = " << best_wg.modularity(g) << "\n\n";
 
-	cout <<"\n\n";
+	cout << "Seed = " << helper.seed << "\n\n";
 
-	cout << "Modularity of final partition = " << wg.modularity(g) << "\n\n";
+//	// reassign cluster assignments to final_best_wg
+//	for(int i = 0; i < best_wg.num_vertices; i++)
+//	{
+//		if((best_wg.vertex[i].id != i) || (best_wg.vertex[i].origNodes.size() == 0))
+//			continue;
+//
+//		for(auto it = best_wg.vertex[i].origNodes.begin(); it != best_wg.vertex[i].origNodes.end(); it++)
+//		{
+//			c.n2c[*it] = i;
+//		}
+//	}
 
-	//c.displayOutdegree(g);
+
+//	finalize(best_wg, c);
+//
+//	wg = c.rebuild_graph(finalEdges);
+//
+//	new_modularity = wg.modularity(g);
+//
+//	if(new_modularity > best_modularity)
+//	{
+//		best_modularity = new_modularity;
+//		best_wg = c.rebuild_graph(finalEdges);
+//	}
+//
+//	wg.displayGraph();
+//
+//	cout << "\n\n Modularity = " << wg.modularity(g) << "\n\n";
 
 	//write_partition(outputFile, new_wg, g);
+
+	delete[] cluster_tabu_list;
+	delete[] perturb_tabu_list;
 
 	return 0;
 }
 
-void calcNeighborhoodSize(Graph * graph)
+void split_clusters(WeightedGraph& wg, Community& c, Graph& g)
+{
+	for(int i = 0; i < wg.num_vertices; i++)
+	{
+		if(wg.vertex[i].origNodes.size() == 0)// || wg.vertex[i].origNodes.size() <= 15) // if empty cluster
+		{
+			continue;
+		}
+		std::vector<pair<int, int> > vertices;
+
+		// add the vertices of the cluster to the vector. sort based on degree
+		for(auto it = wg.vertex[i].origNodes.begin(); it != wg.vertex[i].origNodes.end(); ++it)
+		{
+			int degree = g.vertex[*it].degree;
+			vertices.push_back(make_pair(*it, degree)); // pair is <vertex, degree>
+		}
+		std::sort(vertices.begin(), vertices.end(), greater_than_key_3());
+
+		std::vector<int> potential_clique;
+		found = false;
+		for(auto it = vertices.begin(); it != vertices.end() && !found; ++it)
+		{
+			build_clique(potential_clique, g, c, it->first);
+
+			// if a clique starting with the current vertex is not found, clear the current potential clique
+			if(!found)
+				potential_clique.clear();
+		}
+
+		if(found)
+		{
+			cout << "In cluster " << i << " clique: ";
+			expand_clique(wg, potential_clique, g, c, i);
+			for(auto it = potential_clique.begin(); it != potential_clique.end(); ++it)
+			{
+				cout << *it + 1 << "  ";
+			}
+			cout << endl << endl;
+		}
+	}
+}
+
+void expand_clique(WeightedGraph& wg, vector<int>& potential_vertex, Graph& g, Community& c, int& cur_vertex)
+{
+	int new_cluster = c.comm; //assign the new cluster it's id
+	c.comm++;
+
+	/*
+	 * change the community assignments for all vertices in the clique to new_cluster.
+	 * remove it from the current clusters origNodes vector
+	 */
+	for(auto it = potential_vertex.begin(); it != potential_vertex.end(); ++it)
+	{
+		c.n2c[*it] = new_cluster;
+		wg.vertex[cur_vertex].origNodes.erase(std::remove(wg.vertex[cur_vertex].origNodes.begin(), wg.vertex[cur_vertex].origNodes.end(), *it),
+														  wg.vertex[cur_vertex].origNodes.end());
+	}
+
+	// recompute the in and out degrees of all nodes in the current cluster
+	c.recalc_degrees(wg.vertex[cur_vertex].origNodes, g);
+
+	// for every node in the current cluster, check its outdegree to new_cluster
+	for(auto it = wg.vertex[cur_vertex].origNodes.begin(); it != wg.vertex[cur_vertex].origNodes.end(); ++it)
+	{
+		auto out_degree_it = c.out_degree[*it].find(new_cluster);
+
+		// if this node is connected to the cluster
+		if(out_degree_it != c.out_degree[*it].end())
+		{
+			// compare the in_degree to the out_degree to this node
+			if(out_degree_it->second > c.in_degree[*it])
+			{
+				int prev_cluster = c.n2c[*it];
+				c.n2c[*it] = new_cluster; // reassign the current node's community
+
+				//update the degrees of nodes adjacent to it, only if in the prev_cluster
+				for(int i = 0; i < g.vertex[*it].degree; i++)
+				{
+					int neighbor = g.vertex[*it].neighbors[i];
+					if(c.n2c[neighbor] == prev_cluster)
+					{
+						// check if neighbor is connected to this previously or not
+						auto out_degree_it_2 = c.out_degree[neighbor].find(new_cluster);
+
+						// not connected
+						if(out_degree_it_2 == c.out_degree[neighbor].end())
+						{
+							// reduce its in_degree
+							--c.in_degree[neighbor];
+
+							// update outdegree
+							c.out_degree[neighbor].insert(make_pair(new_cluster, 1));
+						}
+						else
+						{
+							--c.in_degree[neighbor];
+							++out_degree_it_2;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+// add adjacent vertex with highest degree to potential clique, if possible
+int choose_next(int& cur_vertex, Graph& g, Community& c, int& prev_vertex, vector<int>& potential_clique)
+{
+	int next_vertex = -1;
+	int max_degree = 0;
+	for(int i = 0; i < g.vertex[cur_vertex].degree; i++)
+	{
+		int neighbor = g.vertex[cur_vertex].neighbors[i];
+
+		/*
+		 * if the node is a neighbor from the previous level
+		 * or if the node in consideration is already included in the
+		 * current clique to be considered, ignore
+		 */
+		if((prev_vertex == neighbor) || (std::find(potential_clique.begin(), potential_clique.end(), neighbor) != potential_clique.end()))
+		{
+			continue;
+		}
+
+		// if the neighbor is in a different cluster, ignore
+		if(c.n2c[neighbor] != c.n2c[cur_vertex])
+		{
+			continue;
+		}
+
+		if(g.vertex[neighbor].degree > max_degree)
+		{
+			next_vertex = neighbor;
+			max_degree = g.vertex[neighbor].degree;
+		}
+	}
+	return next_vertex;
+}
+
+void build_clique(vector<int>& potential_clique, Graph& g, Community& c, int& cur_vertex)
+{
+	// add starting vertex to potential clique
+	potential_clique.push_back(cur_vertex);
+	int prev_vertex = -1;
+	while(1)
+	{
+		int next_vert = choose_next(cur_vertex, g, c, prev_vertex, potential_clique);
+		if(next_vert == -1) // no vertices to choose from, exit
+		{
+			return;
+		}
+		else
+		{
+			potential_clique.push_back(next_vert);
+			prev_vertex = cur_vertex;
+			cur_vertex = next_vert;
+		}
+		if(potential_clique.size() == 4)
+		{
+			bool is_clique = check_connectivity(potential_clique, g);
+			if(is_clique)
+			{
+				found = true;
+				return;
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+}
+
+// checks if potential clique is a clique
+bool check_connectivity(vector<int>& potential_clique, Graph& g)
+{
+	bool is_clique = true;
+	std::sort(potential_clique.begin(), potential_clique.end());
+	for(auto it = potential_clique.begin(); it != potential_clique.end(); ++it)
+	{
+		vector<int> intersection(g.vertex[*it].degree);
+		vector<int>::iterator inter_it = set_intersection(potential_clique.begin(),
+									potential_clique.end(),
+									g.vertex[*it].neighbors,
+									g.vertex[*it].neighbors + g.vertex[*it].degree,
+									intersection.begin());
+		intersection.resize(inter_it - intersection.begin());
+		if(intersection.size() != 3)
+		{
+			is_clique = false;
+			break;
+		}
+		//intersection.clear();
+	}
+	return is_clique;
+}
+
+void finalize(WeightedGraph& wg, Community& c)
+{
+	//for each vertex in wg
+	for(int i = 0; i < wg.num_vertices; i++)
+	{
+		if(wg.vertex[i].origNodes.size() == 0 || wg.vertex[i].id == -1)
+			continue;
+
+		int max_out_degree = 0, cluster;
+
+		for(unsigned int j = 0; j < wg.vertex[i].neighbors.size(); ++j)
+		{
+			int neighbor = wg.vertex[i].neighbors[j];
+			if(wg.vertex[neighbor].id == -1)
+			{
+				continue;
+			}
+			pair<int, int> edge;
+			if(i < neighbor)
+			{
+				edge = make_pair(i, neighbor);
+			}
+			else
+			{
+				edge = make_pair(neighbor, i);
+			}
+			auto it = wg.edges.cross_edges.find(edge);
+			if(it->second > max_out_degree)
+			{
+				max_out_degree = it->second;
+				cluster = neighbor;
+			}
+		}
+		if(max_out_degree > wg.vertex[i].in_links)
+		{
+			if(wg.vertex[i].origNodes.size() >= wg.vertex[cluster].origNodes.size())
+			{
+				for(unsigned int k = 0; k < wg.vertex[cluster].origNodes.size(); k++)
+				{
+					c.n2c[wg.vertex[cluster].origNodes[k]] = i;
+				}
+				wg.vertex[cluster].id = -1;
+			}
+			else
+			{
+				for(unsigned int k = 0; k < wg.vertex[i].origNodes.size(); k++)
+				{
+					c.n2c[wg.vertex[i].origNodes[k]] = cluster;
+				}
+				wg.vertex[i].id = -1;
+			}
+		}
+	}
+}
+
+void calcNeighborhoodSize(Graph* graph)
 {
 	for(int i=0; i < graph->num_vertices; i++)
 	{
-		graph->vertex[i].common = new int[graph->vertex[i].degree];
+		graph->vertex[i].common = new int[graph->vertex[i].degree]();
+
 		for(int j=0; j < graph->vertex[i].degree; j++)
 		{
 			int neighbor = graph->vertex[i].neighbors[j];
+			if(graph->vertex[neighbor].degree == 0)
+			{
+				continue;
+			}
 			vector<int> intersection(graph->vertex[i].degree);
 			vector<int>::iterator it;
 			it = set_intersection(graph->vertex[i].neighbors,
