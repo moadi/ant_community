@@ -10,7 +10,7 @@ class ClusterTabuList
 		int head;
 
 	public:
-		static const int LIST_SIZE = 4;
+		static const int LIST_SIZE = 2;
 		ClusterTabuList();
 		void addToList(int);
 		bool searchList(int);

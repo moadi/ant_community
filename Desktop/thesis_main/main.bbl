@@ -1,235 +1,313 @@
 \begin{thebibliography}{10}
 
+\bibitem{polbooks}
+{Books about US Politics}.
+\newblock \url{http://www.orgnet.com/}.
+
 \bibitem{Barabasi99emergenceScaling}
 Albert-Laszlo Barabasi and Reka Albert.
 \newblock Emergence of scaling in random networks.
-\newblock {\em Science}, 286(5439):509--512, 1999.
+\newblock {\em Science}, 286(5439), pp. 509--512, 1999.
 
 \bibitem{blondel2008fuc}
-V.D. Blondel, J.L. Guillaume, R.~Lambiotte, and E.L.J.S. Mech.
+Vincent~D. Blondel, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne
+  Lefebvre.
 \newblock {Fast unfolding of communities in large networks}.
-\newblock {\em J. Stat. Mech}, page P10008, 2008.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment}, 2008(10):P10008, 2008.
+
+\bibitem{PhysRevE.70.056122}
+Marian Boguna, Romualdo Pastor-Satorras, Albert Diaz-Guilera, and Alex Arenas.
+\newblock Models of social networks based on social distance attachment.
+\newblock {\em Physical Review E}, 70(5):056122, Nov 2004.
 
 \bibitem{10.1109/TKDE.2007.190689}
-Ulrik Brandes, Daniel Delling, Marco Gaertler, Robert G?rke, Martin Hoefer,
+Ulrik Brandes, Daniel Delling, Marco Gaertler, Robert Gorke, Martin Hoefer,
   Zoran Nikoloski, and Dorothea Wagner.
 \newblock On modularity clustering.
-\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
-  20(2):172--188, 2008.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering}, 20(2), pp.
+  172--188, 2008.
 
 \bibitem{5910378}
-T.N. Bui, Xianghua Deng, and C.M. Zrncic.
+Thang~N. Bui, Xianghua Deng, and Catherine~M. Zrncic.
 \newblock An improved ant-based algorithm for the degree-constrained minimum
   spanning tree problem.
-\newblock {\em Evolutionary Computation, IEEE Transactions on}, 16(2):266--278,
-  2012.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, 16(2), pp.
+  266--278, 2012.
+
+\bibitem{Bui:2009:PSM:1569901.1569903}
+Thang~N. Bui, ThanhVu Nguyen, and Joseph~R. Rizzo, Jr.
+\newblock Parallel shared memory strategies for ant-based optimization
+  algorithms.
+\newblock In {\em Proceedings of the 11th Annual Conference on Genetic and
+  Evolutionary Computation}, GECCO '09, pp. 1--8, New York, NY, USA,
+  2009.
 
 \bibitem{Clauset2004}
-Aaron Clauset, M.~E.~J. Newman, , and Cristopher Moore.
+Aaron Clauset, Mark Newman, and Cristopher Moore.
 \newblock Finding community structure in very large networks.
-\newblock {\em Physical Review E}, pages 1-- 6, 2004.
+\newblock {\em Physical Review E}, 70(6):06111, Dec 2004.
 
 \bibitem{RSA:RSA1001}
 Anne Condon and Richard~M. Karp.
 \newblock Algorithms for graph partitioning on the planted partition model.
-\newblock {\em Random Structures \& Algorithms}, 18(2):116--140, 2001.
+\newblock {\em Random Structures \& Algorithms}, 18(2), pp. 116--140, 2001.
+
+\bibitem{igraph}
+Gabor Csardi and Tamas Nepusz.
+\newblock The igraph software package for complex network research.
+\newblock {\em InterJournal}, Complex Systems, pp. 1695, 2006.
 
 \bibitem{Danon05comparingcommunity}
 Leon Danon, Albert Díaz-guilera, and Jordi Duch.
 \newblock Comparing community structure identification.
-\newblock {\em Journal of Statistical Mechanics: Theory and Experiment}, page
-  09008, 2005.
-
-\bibitem{585892}
-M.~Dorigo and L.M. Gambardella.
-\newblock Ant colony system: a cooperative learning approach to the traveling
-  salesman problem.
-\newblock {\em Evolutionary Computation, IEEE Transactions on}, 1(1):53--66,
-  1997.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment}, 2005(09):P09008, 2005.
 
 \bibitem{dorigo1992}
 Marco Dorigo.
 \newblock {\em Optimization, Learning and Natural Algorithms}.
-\newblock PhD thesis, Politecnico di Milano, Italy, 1992.
+\newblock Ph.D. thesis, Politecnico di Milano, Italy, 1992.
+
+\bibitem{585892}
+Marco Dorigo and Luca~M. Gambardella.
+\newblock Ant colony system: a cooperative learning approach to the traveling
+  salesman problem.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, 1(1), pp.
+  53--66, 1997.
 
 \bibitem{duch-2005-72}
-J.~Duch and A.~Arenas.
+Jordi Duch and Alex Arenas.
 \newblock Community detection in complex networks using extremal optimization.
 \newblock {\em Physical Review E}, 72:027104, 2005.
+
+\bibitem{2010JSMTE..12..037E}
+Tim~S. Evans.
+\newblock Clique graphs and overlapping communities.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment},
+  2010(12), pp. 12037, 2010.
 
 \bibitem{Fortunato201075}
 Santo Fortunato.
 \newblock Community detection in graphs.
-\newblock {\em Physics Reports}, 486(3–5):75 -- 174, 2010.
+\newblock {\em Physics Reports}, 486(3–5), pp. 75--174, 2010.
 
 \bibitem{Fortunato02012007}
 Santo Fortunato and Marc Barthélemy.
 \newblock Resolution limit in community detection.
-\newblock {\em Proceedings of the National Academy of Sciences}, 104(1):36--41,
-  2007.
+\newblock {\em Proceedings of the National Academy of Sciences}, 104(1), pp.
+  36--41, 2007.
 
 \bibitem{Girvan11062002}
-M.~Girvan and M.~E.~J. Newman.
+Michelle Girvan and Mark Newman.
 \newblock Community structure in social and biological networks.
-\newblock {\em Proceedings of the National Academy of Sciences},
-  99(12):7821--7826, 2002.
+\newblock {\em Proceedings of the National Academy of Sciences}, 99(12), pp.
+  7821--7826, 2002.
 
 \bibitem{PhysRevE.81.046106}
 Benjamin~H. Good, Yves-Alexandre de~Montjoye, and Aaron Clauset.
 \newblock Performance of modularity maximization in practical contexts.
-\newblock {\em Phys. Rev. E}, 81:046106, Apr 2010.
+\newblock {\em Physical Review E}, 81:046106, Apr 2010.
 
 \bibitem{Guimera04simulatedAnnealingNetworks}
 Roger Guimera and Luis A.~Nunes Amaral.
-\newblock {\em Nature}.
+\newblock Functional cartography of complex metabolic networks.
+\newblock {\em Nature}, 433(7028), pp. 895--900, Feb 2005.
+
+\bibitem{PhysRevE.68.065103}
+Roger Guimera, Leon Danon, Albert Diaz-Guilera, Francesc Giralt, and Alex
+  Arenas.
+\newblock Self-similar community structure in a network of human interactions.
+\newblock {\em Physical Review E}, 68:065103, Dec 2003.
 
 \bibitem{DBLP:journals/corr/abs-1303-4711}
-Dongxiao He, Jie Liu, Bo~Yang, Yuxiao Huang, Dayou Liu, and Di~Jin.
-\newblock An ant-based algorithm with local optimization for community
-  detection in large-scale networks.
-\newblock {\em CoRR}, abs/1303.4711, 2013.
+Dongxiao He, Jie Liu, Dayou Liu, Di~Jin, and Zhengxue Jia.
+\newblock Ant colony optimization for community detection in large-scale
+  complex networks.
+\newblock{\em Seventh International
+  Conference on Natural Computation (ICNC)}, Volume~2, pp. 1151--1155, Jul 2011.
+
+\bibitem{4051119}
+David~A. Huffman.
+\newblock A method for the construction of minimum-redundancy codes.
+\newblock {\em Proceedings of the Institute of Radio Engineers}, 40(9), pp. 1098--1101, Sept 1952.
 
 \bibitem{Jin:2011:ACO:2022850.2022861}
 Di~Jin, Dayou Liu, Bo~Yang, Carlos Baquero, and Dongxiao He.
 \newblock Ant colony optimization with markov random walk for community
   detection in graphs.
-\newblock In {\em Proceedings of the 15th Pacific-Asia Conference on Advances
-  in Knowledge Discovery and Data Mining - Volume Part II}, PAKDD'11, pages
-  123--134, Berlin, Heidelberg, 2011. Springer-Verlag.
+\newblock{\em Proceedings of the 15th Pacific-Asia Conference on Advances
+  in Knowledge Discovery and Data Mining - Volume Part II}, PAKDD'11, pp.
+  123--134, Berlin, Heidelberg, Springer-Verlag. 2011. 
+
+\bibitem{Knuth:1993:SGP:164984}
+Donald~E. Knuth.
+\newblock {\em The Stanford GraphBase: A Platform for Combinatorial Computing}.
+\newblock ACM, New York, NY, USA, 1993.
+
+\bibitem{2009PhRvE..80e6117L}
+Andrea {Lancichinetti} and Santo {Fortunato}.
+\newblock {Community detection algorithms: A comparative analysis}.
+\newblock {\em Physical Review E}, 80(5):056117, Nov 2009.
 
 \bibitem{PhysRevE.78.046110}
 Andrea Lancichinetti, Santo Fortunato, and Filippo Radicchi.
 \newblock Benchmark graphs for testing community detection algorithms.
-\newblock {\em Phys. Rev. E}, 78:046110, Oct 2008.
+\newblock {\em Physical Review E}, 78:046110, Oct 2008.
+
+\bibitem{dolphins}
+David Lusseau, Karsten Schneider, OliverJ. Boisseau, Patti Haase, Elisabeth
+  Slooten, and SteveM. Dawson.
+\newblock The bottlenose dolphin community of doubtful sound features a large
+  proportion of long-lasting associations.
+\newblock {\em Behavioral Ecology and Sociobiology}, 54(4), pp. 396--405, 2003.
 
 \bibitem{PhysRevE.71.046101}
 Claire~P. Massen and Jonathan P.~K. Doye.
 \newblock Identifying communities within energy landscapes.
-\newblock {\em Phys. Rev. E}, 71:046101, Apr 2005.
+\newblock {\em Physical Review E}, 71:046101, Apr 2005.
 
 \bibitem{milgram67smallworld}
 Stanley Milgram.
 \newblock {The Small World Problem}.
-\newblock {\em Psychology Today}, 2:60--67, 1967.
-
-\bibitem{Newman06062006}
-M.~E.~J. Newman.
-\newblock Modularity and community structure in networks.
-\newblock {\em Proceedings of the National Academy of Sciences},
-  103(23):8577--8582, 2006.
-
-\bibitem{PhysRevE.69.026113}
-M.~E.~J. Newman and M.~Girvan.
-\newblock Finding and evaluating community structure in networks.
-\newblock {\em Phys. Rev. E}, 69(2):026113, February 2004.
+\newblock {\em Psychology Today}, 2, pp. 60--67, 1967.
 
 \bibitem{newman03fast}
-M.E.J. Newman.
+Mark Newman.
 \newblock Fast algorithm for detecting community structure in networks.
-\newblock {\em Physical Review E}, 69, September 2003.
+\newblock {\em Physical Review E}, 69, Sept 2003.
 
-\bibitem{6045331}
-C.~Pizzuti.
-\newblock A multiobjective genetic algorithm to find communities in complex
-  networks.
-\newblock {\em Evolutionary Computation, IEEE Transactions on}, 16(3):418--430,
-  2012.
+\bibitem{2006PhRvE..74c6104N}
+Mark {Newman}.
+\newblock {Finding community structure in networks using the eigenvectors of
+  matrices}.
+\newblock {\em Physical Review E}, 74(3):036104, Sept 2006.
+
+\bibitem{Newman06062006}
+Mark Newman.
+\newblock Modularity and community structure in networks.
+\newblock {\em Proceedings of the National Academy of Sciences}, 103(23), pp.
+  8577--8582, 2006.
+
+\bibitem{PhysRevE.69.026113}
+Mark Newman and Michelle Girvan.
+\newblock Finding and evaluating community structure in networks.
+\newblock {\em Physical Review E}, 69(2):026113, Feb 2004.
+
+\bibitem{1742-5468-2012-08-P08001}
+G{\"u}nce~Keziban Orman, Vincent Labatut, and Hocine Cherifi.
+\newblock Comparative evaluation of community detection algorithms: a
+  topological approach.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment},
+  2012(08):P08001, 2012.
 
 \bibitem{2008ppsnpizzuti}
 Clara Pizzuti.
-\newblock Ga-net: A genetic algorithm for community detection in social
+\newblock GA-Net: A genetic algorithm for community detection in social
   networks.
-\newblock In Günter Rudolph, Thomas Jansen, Simon Lucas, Carlo Poloni, and
-  Nicola Beume, editors, {\em Parallel Problem Solving from Nature – PPSN X},
-  volume 5199 of {\em Lecture Notes in Computer Science}, pages 1081--1090.
+\newblock {\em Parallel Problem Solving from Nature – PPSN X},
+  volume 5199 of {\em Lecture Notes in Computer Science}, pp. 1081--1090.
   Springer Berlin Heidelberg, 2008.
 
 \bibitem{Pizzuti:2012:BDM:2245276.2245321}
 Clara Pizzuti.
 \newblock Boosting the detection of modular community structure with genetic
   algorithms and local search.
-\newblock In {\em Proceedings of the 27th Annual ACM Symposium on Applied
-  Computing}, SAC '12, pages 226--231, New York, NY, USA, 2012. ACM.
+\newblock{\em Proceedings of the 27th Annual ACM Symposium on Applied
+  Computing}, SAC '12, pp. 226--231, New York, NY, USA, 2012. ACM.
+
+\bibitem{6045331}
+Clara Pizzuti.
+\newblock A multiobjective genetic algorithm to find communities in complex
+  networks.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, 16(3), pp.
+  418--430, 2012.
 
 \bibitem{ponslatapy05}
 Pascal Pons and Matthieu Latapy.
 \newblock Computing communities in large networks using random walks.
-\newblock In pInar Yolum, Tunga Güngör, Fikret Gürgen, and Can Özturan,
-  editors, {\em Computer and Information Sciences - ISCIS 2005}, volume 3733 of
-  {\em Lecture Notes in Computer Science}, pages 284--293. Springer Berlin
+\newblock{\em Computer and Information Sciences - ISCIS 2005}, Volume 3733 of
+  {\em Lecture Notes in Computer Science}, pp. 284--293. Springer Berlin
   Heidelberg, 2005.
 
 \bibitem{PhysRevE.74.016107}
 Josep~M. Pujol, Javier B\'ejar, and Jordi Delgado.
 \newblock Clustering algorithm for determining community structure in large
   networks.
-\newblock {\em Phys. Rev. E}, 74:016107, Jul 2006.
+\newblock {\em Physical Review E}, 74:016107, Jul 2006.
+
+\bibitem{rsoftware}
+{R Development Core Team}.
+\newblock {\em R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria, 2011.
 
 \bibitem{Radicchi02032004}
 Filippo Radicchi, Claudio Castellano, Federico Cecconi, Vittorio Loreto, and
   Domenico Parisi.
 \newblock Defining and identifying communities in networks.
 \newblock {\em Proceedings of the National Academy of Sciences of the United
-  States of America}, 101(9):2658--2663, 2004.
+  States of America}, 101(9), pp. 2658--2663, 2004.
+
+\bibitem{2007PhRvE..76c6106R}
+Usha~Nandini {Raghavan}, Reka {Albert}, and Soundar {Kumara}.
+\newblock {Near linear time algorithm to detect community structures in
+  large-scale networks}.
+\newblock {\em Physical Review E}, 76(3):036106, Sept 2007.
 
 \bibitem{PhysRevLett.93.218701}
 J\"org Reichardt and Stefan Bornholdt.
 \newblock Detecting fuzzy community structures in complex networks with a potts
   model.
-\newblock {\em Phys. Rev. Lett.}, 93:218701, Nov 2004.
+\newblock {\em Physical Review Letters}, 93:218701, Nov 2004.
 
 \bibitem{Rissanen1978465}
-J.~Rissanen.
+Jorma Rissanen.
 \newblock Modeling by shortest data description.
-\newblock {\em Automatica}, 14(5):465 -- 471, 1978.
+\newblock {\em Automatica}, 14(5), pp. 465--471, 1978.
 
 \bibitem{PhysRevE.81.046114}
 Peter Ronhovde and Zohar Nussinov.
 \newblock Local resolution-limit-free potts model for community detection.
-\newblock {\em Phys. Rev. E}, 81:046114, Apr 2010.
+\newblock {\em Physical Review E}, 81:046114, Apr 2010.
 
 \bibitem{Rosvall29012008}
 Martin Rosvall and Carl~T. Bergstrom.
 \newblock Maps of random walks on complex networks reveal community structure.
-\newblock {\em Proceedings of the National Academy of Sciences},
-  105(4):1118--1123, 2008.
+\newblock {\em Proceedings of the National Academy of Sciences}, 105(4), pp.
+  1118--1123, 2008.
 
 \bibitem{5586496}
 S.~Sadi, S.~Öğüdücü, and A.S. Uyar.
 \newblock An efficient community detection method using parallel clique-finding
   ants.
-\newblock In {\em Evolutionary Computation (CEC), 2010 IEEE Congress on}, pages
-  1--7, 2010.
+\newblock{\em IEEE Congress on Evolutionary Computation (CEC)}, pp. 1--7, 2010.
 
 \bibitem{Stützle2000889}
 Thomas Stützle and Holger~H. Hoos.
 \newblock Max–min ant system.
-\newblock {\em Future Generation Computer Systems}, 16(8):889 -- 914, 2000.
-
-\bibitem{Tasgin06gaCommunityDetection}
-Mursel Tasgin and Haluk Bingol.
-\newblock Community detection in complex networks using genetic algorithm.
-\newblock In {\em ECCS '06: Proc. of the European Conference on Complex
-  Systems}, April 2006.
+\newblock {\em Future Generation Computer Systems}, 16(8), pp. 889--914, 2000.
 
 \bibitem{vandongen00}
 Stijn van Dongen.
 \newblock {\em Graph Clustering by Flow Simulation}.
-\newblock PhD thesis, University of Utrecht, 2000.
+\newblock Ph.D. thesis, University of Utrecht, 2000.
 
 \bibitem{Wasserman-Social-1994}
-S.~Wasserman and K.~Faust.
+Stanley Wasserman and Katherine Faust.
 \newblock {\em Social Network Analysis: Methods and Applications}.
 \newblock Cambridge University Press, 1994.
 
 \bibitem{Watts-Colective-1998}
-D.J. Watts and S.H. Strogatz.
-\newblock Collective dynamics of 'small-world' networks.
-\newblock {\em Nature}, (393):440--442, 1998.
+Duncan~J. Watts and Steven~H. Strogatz.
+\newblock Collective dynamics of `small-world' networks.
+\newblock {\em Nature}, (393), pp. 440--442, 1998.
+
+\bibitem{1977}
+Wayne~W. Zachary.
+\newblock An information flow model for conflict and fission in small groups.
+\newblock {\em Journal of Anthropological Research}, 33(4), pp. 452--473, 1977.
 
 \bibitem{PhysRevE.67.041908}
 Haijun Zhou.
 \newblock Network landscape from a brownian particle's perspective.
-\newblock {\em Phys. Rev. E}, 67:041908, Apr 2003.
+\newblock {\em Physical Review E}, 67:041908, Apr 2003.
 
 \end{thebibliography}

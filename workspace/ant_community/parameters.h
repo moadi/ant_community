@@ -34,7 +34,7 @@ class Parameters
 
 			long int max_edges = ((g.num_vertices)*(g.num_vertices - 1))/2;
 			double p =  ((double) g.num_edges / max_edges) * 100;
-			cout << "Percentage of links = " << p << "\n\n";
+			//cout << "Percentage of links = " << p << "\n\n";
 			if (p < 0.100)
 			{
 				threshold = 0.80;
@@ -53,7 +53,7 @@ class Parameters
 			{
 				threshold = 0.5;
 			}
-			max_decrease = 5;
+			max_decrease = 3;
 		}
 };
 

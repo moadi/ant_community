@@ -1,0 +1,384 @@
+Infomap: 1000_s_0.1
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.1
+Mean =  0.9999 
+Std dev =  5e-04 
+CV =  0.05 
+Best =  1 
+
+Infomap: 1000_s_0.2
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.2
+Mean =  0.9993 
+Std dev =  0.0016 
+CV =  0.1559 
+Best =  1 
+
+Infomap: 1000_s_0.3
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.3
+Mean =  0.9972 
+Std dev =  0.0043 
+CV =  0.4273 
+Best =  1 
+
+Infomap: 1000_s_0.4
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.4
+Mean =  0.9919 
+Std dev =  0.0098 
+CV =  0.9899 
+Best =  1 
+
+Infomap: 1000_s_0.5
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.5
+Mean =  0.9847 
+Std dev =  0.0111 
+CV =  1.1276 
+Best =  1 
+
+Infomap: 1000_s_0.6
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_s_0.6
+Mean =  0.4263 
+Std dev =  0.4675 
+CV =  109.6624 
+Best =  0.9926706 
+
+Infomap: 1000_s_0.7
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  1 
+
+Label Propagation: 1000_s_0.7
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 1000_s_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Label Propagation: 1000_s_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 1000_b_0.1
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_b_0.1
+Mean =  0.9993 
+Std dev =  0.0035 
+CV =  0.346 
+Best =  1 
+
+Infomap: 1000_b_0.2
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_b_0.2
+Mean =  0.9998 
+Std dev =  0.0017 
+CV =  0.1749 
+Best =  1 
+
+Infomap: 1000_b_0.3
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_b_0.3
+Mean =  0.9987 
+Std dev =  0.0042 
+CV =  0.418 
+Best =  1 
+
+Infomap: 1000_b_0.4
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_b_0.4
+Mean =  0.9897 
+Std dev =  0.0122 
+CV =  1.2356 
+Best =  1 
+
+Infomap: 1000_b_0.5
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 1000_b_0.5
+Mean =  0.4794 
+Std dev =  0.4521 
+CV =  94.2988 
+Best =  1 
+
+Infomap: 1000_b_0.6
+Mean =  0.6778 
+Std dev =  0.4697 
+CV =  69.2959 
+Best =  0.996716 
+
+Label Propagation: 1000_b_0.6
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 1000_b_0.7
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Label Propagation: 1000_b_0.7
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 1000_b_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Label Propagation: 1000_b_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 5000_s_0.1
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.1
+Mean =  0.9999 
+Std dev =  2e-04 
+CV =  0.0248 
+Best =  1 
+
+Infomap: 5000_s_0.2
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.2
+Mean =  0.9997 
+Std dev =  4e-04 
+CV =  0.0377 
+Best =  1 
+
+Infomap: 5000_s_0.3
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.3
+Mean =  0.9994 
+Std dev =  6e-04 
+CV =  0.0642 
+Best =  1 
+
+Infomap: 5000_s_0.4
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.4
+Mean =  0.9989 
+Std dev =  0.001 
+CV =  0.0986 
+Best =  1 
+
+Infomap: 5000_s_0.5
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.5
+Mean =  0.9976 
+Std dev =  0.0014 
+CV =  0.1366 
+Best =  1 
+
+Infomap: 5000_s_0.6
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_s_0.6
+Mean =  0.994 
+Std dev =  0.0023 
+CV =  0.2284 
+Best =  1 
+
+Infomap: 5000_s_0.7
+Mean =  0.9997 
+Std dev =  0 
+CV =  0 
+Best =  0.999653 
+
+Label Propagation: 5000_s_0.7
+Mean =  0.4037 
+Std dev =  0.4793 
+CV =  118.7174 
+Best =  0.9823004 
+
+Infomap: 5000_s_0.8
+Mean =  0.6677 
+Std dev =  0.0083 
+CV =  1.2393 
+Best =  0.6883062 
+
+Label Propagation: 5000_s_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 5000_b_0.1
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.1
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Infomap: 5000_b_0.2
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.2
+Mean =  0.9998 
+Std dev =  5e-04 
+CV =  0.0529 
+Best =  1 
+
+Infomap: 5000_b_0.3
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.3
+Mean =  0.9998 
+Std dev =  6e-04 
+CV =  0.0584 
+Best =  1 
+
+Infomap: 5000_b_0.4
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.4
+Mean =  0.9993 
+Std dev =  9e-04 
+CV =  0.0898 
+Best =  1 
+
+Infomap: 5000_b_0.5
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.5
+Mean =  0.9981 
+Std dev =  0.0019 
+CV =  0.1862 
+Best =  1 
+
+Infomap: 5000_b_0.6
+Mean =  1 
+Std dev =  0 
+CV =  0 
+Best =  1 
+
+Label Propagation: 5000_b_0.6
+Mean =  0.9472 
+Std dev =  0.1955 
+CV =  20.6376 
+Best =  0.997995 
+
+Infomap: 5000_b_0.7
+Mean =  0.9991 
+Std dev =  3e-04 
+CV =  0.0293 
+Best =  0.9995716 
+
+Label Propagation: 5000_b_0.7
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+
+Infomap: 5000_b_0.8
+Mean =  0.3404 
+Std dev =  0.1934 
+CV =  56.8081 
+Best =  0.463178 
+
+Label Propagation: 5000_b_0.8
+Mean =  0 
+Std dev =  0 
+CV =  NaN 
+Best =  0 
+

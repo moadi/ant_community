@@ -1,8 +1,19 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Ant-Based Community Detection Algorithm}}{12}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Exploration phase}}{13}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Reset ants}}{16}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Ant-Based Community Detection Algorithm\relax }}{13}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Exploration phase\relax }}{17}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Reset ants\relax }}{18}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Build initial set of communities\relax }}{19}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Local Optimization\relax }}{21}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Reassign Communities and Rebuild Weighted Graph\relax }}{23}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Merging Communities\relax }}{25}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Perturbation\relax }}{27}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces NMI Results on LFR Benchmark with $(\gamma , \beta ) = (2,1)$\relax }}{46}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces NMI Results on LFR Benchmark with $(\gamma , \beta ) = (2,2)$\relax }}{47}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces NMI Results on LFR Benchmark with $(\gamma , \beta ) = (3,1)$\relax }}{48}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces NMI Results on LFR Benchmark with $(\gamma , \beta ) = (3,2)$\relax }}{49}
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -1,19 +1,25 @@
-\documentclass[12pt, letterpaper, oneside, openright]{book}
-\usepackage{amsmath, amssymb, algorithm2e}
-\usepackage{fancyhdr}
+%\documentclass[11pt]{psuthesis}
+\documentclass[12pt, oneside]{book}
+\usepackage{amsmath, amssymb}
+\usepackage[vlined]{algorithm2e}
+\usepackage{url, graphicx, caption, subcaption, morefloats, lscape, pdfpages}
+%\usepackage[numbers]{natbib}
+\newcommand{\xtra}{\rule{0ex}{2.5ex}\rule[-1ex]{0ex}{0ex}}
 \renewcommand*\footnoterule{} % remove line for footnote
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \renewcommand\contentsname{Table of Contents}
 \renewcommand\bibname{References}
 \usepackage[nottoc,numbib]{tocbibind} % include references in TOC
+%\usepackage[titletoc]{appendix}
+%\usepackage{appendix}
 
 \usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
-\makeatletter
-\patchcmd{\l@chapter}% <cmd>
-  {#1}% <search>
-  {\def\numberline##1{\@chapapp~##1\hfill\mbox{}\par\nobreak}#1}% <replace>
-  {}{}% <success><failure>
-\makeatother
+%\makeatletter
+%\patchcmd{\l@chapter}% <cmd>
+%  {#1}% <search>
+%  {\def\numberline##1{\@chapapp~##1\hfill\mbox{}\par\nobreak}#1}% <replace>
+%  {}{}% <success><failure>
+%\makeatother
 
 \usepackage{setspace}
 \usepackage[top = 1in, bottom = 1in, left = 1.5in, right = 1in]{geometry}
@@ -21,8 +27,9 @@
 \begin{document}
 
 \frontmatter
+\includepdf[pages={1}]{committee.pdf}
 \include{title}
-
+\includepdf[pages={2}]{committee.pdf}
 \setcounter{page}{3}
 \include{abstract}
 
@@ -42,6 +49,28 @@
 \include{chap2}
 \include{chap3}
 \include{chap4}
+\include{chap5}
+\input{best1}
+\input{best2}
+\input{best3}
+\input{best4}
+\input{best_mod1}
+
+\appendix 
+\addcontentsline{toc}{chapter}{Appendices}
+
+\chapter{Performance Tables of ABCD}
+
+%\begin{appendices}
+%\chapter{Performance Tables of ABCD}
+%\section{Performance Tables of ABCD}
+\input{tab1}
+\input{tab2}
+\input{tab3}
+\input{tab4}
+\input{realworld}
+%\end{appendices}
+%\appendix
 
 \backmatter
 
@@ -49,3 +78,6 @@
 \bibliography{refs}
 
 \end{document}
+
+
+

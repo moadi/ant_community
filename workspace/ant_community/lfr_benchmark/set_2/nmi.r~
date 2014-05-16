@@ -1,0 +1,22 @@
+#!/usr/bin/env Rscript
+
+# load the package
+library(igraph)
+
+setwd("/home/mua193/Desktop/lfr_benchmark/set_1/")
+
+args <- commandArgs(trailingOnly = TRUE)
+
+real <- scan(toString(args[1]), sep="\n")
+
+found <- scan(toString(args[2]), sep="\n")
+
+nmi <- compare(real, found, method="nmi")
+
+cat(format(round(nmi, 4), nsmall=4))
+
+#cat(nmi)
+
+#cat("\n")
+
+#setwd(initial.dir)

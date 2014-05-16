@@ -19,7 +19,9 @@ void WeightedGraph::displayGraph()
 {
 	std::unordered_map<pair<int, int>, int >::iterator cross_edges_it;
 	std::unordered_map<pair<int, int>, double >::iterator cross_phm_it;
-	ofstream fout("/home/mua193/Desktop/NMI/output.dat");
+	ofstream fout("output.dat");
+
+	ofstream communities("comm-struc.dat");
 	int num = 0;
 	int clusters = 0;
 	for(int i = 0; i < num_vertices; i++)
@@ -30,22 +32,22 @@ void WeightedGraph::displayGraph()
 
 		++clusters;
 
-		cout << "Original graph members of vertex " << i << " : \n";
+		communities << "Original graph members of vertex " << i << " : \n";
 
 		//COME BACK AND CHANGE THIS (FOR DEBUGGING ONLY)
-		//std::sort(vertex[i].origNodes.begin(), vertex[i].origNodes.end());
+		std::sort(vertex[i].origNodes.begin(), vertex[i].origNodes.end());
 
 
 		for(unsigned int j = 0; j < vertex[i].origNodes.size(); j++)
 		{
-			cout << vertex[i].origNodes[j] + 1   << " ";
+			communities << vertex[i].origNodes[j] + 1   << " ";
 			//fout << vertex[i].origNodes[j] + 1 << " ";
 			num++;
 		}
-		//fout << "\n";
-		cout << " [ " << vertex[i].weight << " , " << vertex[i].in_links << ", " << vertex[i].total << " ]  ";
-		cout << "Degree of vertex = " << vertex[i].degree << "\n";
-		cout << "Vertex is connected to clusters with phm: \n";
+		communities << "\n";
+		communities << " [ " << vertex[i].weight << " , " << vertex[i].in_links << ", " << vertex[i].total << " ]  ";
+		communities << "Degree of vertex = " << vertex[i].degree << "\n";
+		communities << "Vertex is connected to clusters with phm: \n";
 		pair<int, int> edge;
 		for(unsigned int j = 0; j < vertex[i].neighbors.size(); j++)
 		{
@@ -62,15 +64,17 @@ void WeightedGraph::displayGraph()
 				cross_edges_it = edges.cross_edges.find(edge);
 				cross_phm_it = edges.cross_phm.find(edge);
 			}
-			cout << vertex[i].neighbors[j] << " - " << cross_edges_it->second << ", " << cross_phm_it->second << "     ";
+			communities << vertex[i].neighbors[j] << " - " << cross_edges_it->second << ", " << cross_phm_it->second << "     ";
 		}
-		cout << "\n \n";
+
+		communities << "\n \n";
 	}
-	cout << "Number of edges = " << edges.cross_edges.size() << "\n\n";
 
-	cout << "Vertices = " << num << endl << endl;
+		communities << "Number of edges = " << edges.cross_edges.size() << "\n\n";
 
-	cout << "Clusters = " << clusters << endl << endl;
+//	cout << num << endl << endl;
+//
+	cout << "Number of communities found = " << clusters << "\n\n";
 
 	clusters = 1;
 
@@ -93,21 +97,22 @@ void WeightedGraph::displayGraph()
 		fout << *it;
 		fout << "\n";
 	}
-	std::vector<int> community_sizes;
-	ofstream community("/home/mua193/Desktop/community_sizes.dat");
-	for(int i = 0; i < num_vertices; i++)
-	{
-		if((vertex[i].origNodes.size() == 0)) //(vertex[i].id != i) || )
-			continue;
+//	std::vector<int> community_sizes;
+//	ofstream community("/home/mua193/Desktop/community_sizes.dat");
+//	for(int i = 0; i < num_vertices; i++)
+//	{
+//		if((vertex[i].origNodes.size() == 0)) //(vertex[i].id != i) || )
+//			continue;
+//
+//		community_sizes.push_back(vertex[i].origNodes.size());
+//	}
+//	std::sort(community_sizes.begin(), community_sizes.end(), std::greater<int>());
+//	for(auto it = community_sizes.begin(); it != community_sizes.end(); ++it)
+//	{
+//		community << *it << "\n";
+//	}
 
-		community_sizes.push_back(vertex[i].origNodes.size());
-	}
-	std::sort(community_sizes.begin(), community_sizes.end(), std::greater<int>());
-	for(auto it = community_sizes.begin(); it != community_sizes.end(); ++it)
-	{
-		community << *it << "\n";
-	}
-	community.close();
+	communities.close();
 	fout.close();
 }
 
@@ -277,9 +282,6 @@ void WeightedGraph::mergeNodes(int node1, int node2)
 												vertex[*it].neighbors.end());
 
 			--vertex[*it].degree;
-
-			//increment node1 degree as new edge was added for it
-			//++vertex[node1].degree; (WRONG!)
 		}
 	} //Done updating the graph
 }

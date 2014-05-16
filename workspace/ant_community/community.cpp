@@ -252,7 +252,7 @@ void Community::reassign_communities()
 			n2c[it->first] = cluster;
 		}
 	}
-	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+	//cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
 }
 
 void Community::reassign_communities(ClusterTabuList* tabu_list)
@@ -507,7 +507,7 @@ void Community::reassign_communities(Graph& g)
 			}
 		}
 	}
-	cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
+	//cout << "Total nodes replaced = " << nodes_replaced << "\n\n";
 }
 
 WeightedGraph Community::rebuild_graph(std::vector<Edge>& finalEdges)

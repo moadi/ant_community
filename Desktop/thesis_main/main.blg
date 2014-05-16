@@ -1,4 +1,5 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: main.aux
 A level-1 auxiliary file: title.aux
 A level-1 auxiliary file: abstract.aux
 A level-1 auxiliary file: thank.aux
@@ -6,15 +7,52 @@ A level-1 auxiliary file: chap1.aux
 A level-1 auxiliary file: chap2.aux
 A level-1 auxiliary file: chap3.aux
 A level-1 auxiliary file: chap4.aux
+A level-1 auxiliary file: chap5.aux
 The style file: plain.bst
 Database file #1: refs.bib
-You're missing a field name---line 288 of file refs.bib
- :   
- :   %month = {\#feb\#},
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-Warning--empty title in Guimera04simulatedAnnealingNetworks
-Warning--empty year in Guimera04simulatedAnnealingNetworks
+Warning--to sort, need author or key in polbooks
+Warning--empty journal in 2007PhRvE..76c6106R
 Warning--can't use both author and editor fields in Wasserman-Social-1994
 Warning--there's a number but no volume in Watts-Colective-1998
-(There was 1 error message)
+You've used 54 entries,
+            2118 wiz_defined-function locations,
+            869 strings with 13369 characters,
+and the built_in function-call counts, 19259 in all, are:
+= -- 1899
+> -- 799
+< -- 10
++ -- 321
+- -- 259
+* -- 1467
+:= -- 3141
+add.period$ -- 167
+call.type$ -- 54
+change.case$ -- 282
+chr.to.int$ -- 0
+cite$ -- 58
+duplicate$ -- 693
+empty$ -- 1564
+format.name$ -- 259
+if$ -- 4067
+int.to.chr$ -- 0
+int.to.str$ -- 54
+missing$ -- 52
+newline$ -- 273
+num.names$ -- 110
+pop$ -- 224
+preamble$ -- 1
+purify$ -- 233
+quote$ -- 0
+skip$ -- 504
+stack$ -- 0
+substring$ -- 1567
+swap$ -- 145
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 212
+warning$ -- 4
+while$ -- 167
+width$ -- 56
+write$ -- 607
+(There were 4 warnings)

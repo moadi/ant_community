@@ -1,63 +1,81 @@
 \SetKwInput{Input}{Input}
-\SetKwFunction{antcommunity}{AntCommunity}
+\SetKwFunction{antcommunity}{AntBasedCommunityDetection}
 \SetKwInput{Output}{Output}
 \SetKwFunction{initants}{InitAnts}
-\SetKwFunction{antsmove}{AntsMove}
-\SetKwFunction{firstpart}{PartitionOneLevel}
+\SetKwFunction{antsmove}{ExploreGraph}
+\SetKwFunction{firstpart}{BuildCommunities}
 \SetKwFunction{reset}{ResetAnts}
-\SetKwFunction{reassign}{ReassignClusters}
+\SetKwFunction{reassign}{ReassignCommunities}
+\SetKwFunction{rebuild}{RebuildGraph}
+\SetKwFunction{update}{UpdatePheromone}
+\SetKwFunction{merge}{MergeCommunities}
+\SetKwFunction{localOpt}{LocalOpt}
+\SetKwFunction{perturb}{Perturb}
+\SetKwFunction{split}{SplitCommunities}
+\SetKwFunction{redo}{Reassign}
 
 \begin{figure}
-\label{fig1}
 \hrule
 \BlankLine
 \begin{algorithm}[H]
-	\SetAlgoLined
+	%\SetAlgoLined
 	\DontPrintSemicolon
-	\antcommunity{$G$} \;
+	\antcommunity{$G=(V, E)$} \;
 	\Input{$G=(V,E)$, graph whose community structure is to be found }
-	\Output{Set of $k$ communities $C = \{C_1, \ldots, C_k\}$}
+	\Output{Weighted Graph $G_{W}^*$, whose vertices represent the community structure of $G$}
 	\Begin{
-		//Initialization \;
-		$i \leftarrow 1$ \;
-		\ForEach{$v \in V$}{
-			Calculate the number of common nodes with all neighbors \;
-		}
+		\tcp{Initialization}
 		Create the set of ants $A$, of size $|V|$ \;
 		\initants{$G, A$}\;
+		\ForEach{$v \in V$}{
+			$sort(v.neighbors)$ \;
+		}
+		\ForEach{$v \in V$}{
+			\For{$i= 0; i < v.degree; i{+}{+}$} {
+				$u \leftarrow v.neighbors[i]$ \;
+				$v.common[i] = set\_intersection(v.neighbors, u.neighbors)$ \;
+			}
+		}
+		$i \leftarrow 1$ \;
 		\BlankLine
-		//Exploration phase \;
+		\tcp{Exploration phase}
 		\While{$i < i_{max}$}{
 			\antsmove{$G, A$} \; 
-			Update phermone evaporation factor $\eta$ \;
 			\reset{$G, A$} \;
 			$i \leftarrow i + 1$ \;
 		}
 		\BlankLine		
-		//Construction phase \;
+		\tcp{Construction phase}
 		Sort $E$ in decreasing order of pheromone \;
-		\firstpart{$G$} \;
-		\reassign{} \;
+		$G_W \leftarrow$\firstpart{$E$} \;
+		\BlankLine
+		\tcp{Optimization Phase}
+		$G_{W}^* \leftarrow$ \localOpt{$G_W$, G} \;
+		\BlankLine
+		\KwRet{$G_{W}^*$} \;
 	}
 
 \end{algorithm}
 \BlankLine
+\BlankLine
+\BlankLine
+\BlankLine
+\BlankLine
+\BlankLine
 \begin{algorithm}[H]
-	\SetAlgoLined
 	\DontPrintSemicolon
 	\initants{G, A} \;
 	\Begin {
+		Initialize pheromone on all edges of $G$\;
 		\For{$i=0; i < |V|; i++$}{
 			$A[i].location \leftarrow V[i]$ \;
 			$A[i].tabuList \leftarrow \varnothing$ \;
-		}
-		\ForEach{$e \in E$}{
-			$e.initPhm = 1$ \;
-			$e.nVisited = 0$ \;
 		}
 	}
 \end{algorithm}
 \BlankLine
 \hrule
+\BlankLine
 \caption{Ant-Based Community Detection Algorithm}
+\label{fig1}
 \end{figure}

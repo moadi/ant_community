@@ -1,9 +1,7 @@
 \begin{figure}
-\label{fig3}
 \hrule
 \BlankLine
 \begin{algorithm}[H]
-	\SetAlgoLined
 	\DontPrintSemicolon
 	\reset{$G, A$} \;
 	\Begin {
@@ -13,9 +11,12 @@
 			}
 		$a.tabuList \leftarrow \varnothing$ \;
 		}
+		\tcp{Reduce pheromone evaporation factor $\eta$ using equation 3.1}
 	}
 \end{algorithm}
 \BlankLine
 \hrule
+\BlankLine
 \caption{Reset ants}
+\label{fig3}
 \end{figure}

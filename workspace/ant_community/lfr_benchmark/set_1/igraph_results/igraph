@@ -1,0 +1,381 @@
+FastGreedy: 1000_s_0.1
+NMI =  0.9341447 
+
+Louvain: 1000_s_0.1
+NMI =  0.9954055 
+
+Walktrap: 1000_s_0.1
+Walktrap =  1 
+
+Eigenvector: 1000_s_0.1
+NMI =  0.6174844 
+
+FastGreedy: 1000_s_0.2
+NMI =  0.848294 
+
+Louvain: 1000_s_0.2
+NMI =  0.9821119 
+
+Walktrap: 1000_s_0.2
+Walktrap =  1 
+
+Eigenvector: 1000_s_0.2
+NMI =  0.5388443 
+
+FastGreedy: 1000_s_0.3
+NMI =  0.7992373 
+
+Louvain: 1000_s_0.3
+NMI =  0.9823187 
+
+Walktrap: 1000_s_0.3
+Walktrap =  1 
+
+Eigenvector: 1000_s_0.3
+NMI =  0.5035811 
+
+FastGreedy: 1000_s_0.4
+NMI =  0.6947542 
+
+Louvain: 1000_s_0.4
+NMI =  0.9800069 
+
+Walktrap: 1000_s_0.4
+Walktrap =  1 
+
+Eigenvector: 1000_s_0.4
+NMI =  0.5077933 
+
+FastGreedy: 1000_s_0.5
+NMI =  0.6062699 
+
+Louvain: 1000_s_0.5
+NMI =  0.9635914 
+
+Walktrap: 1000_s_0.5
+Walktrap =  1 
+
+Eigenvector: 1000_s_0.5
+NMI =  0.3923221 
+
+FastGreedy: 1000_s_0.6
+NMI =  0.4957597 
+
+Louvain: 1000_s_0.6
+NMI =  0.9420461 
+
+Walktrap: 1000_s_0.6
+Walktrap =  0.9847473 
+
+Eigenvector: 1000_s_0.6
+NMI =  0.3638775 
+
+FastGreedy: 1000_s_0.7
+NMI =  0.2949363 
+
+Louvain: 1000_s_0.7
+NMI =  0.7990454 
+
+Walktrap: 1000_s_0.7
+Walktrap =  0.7456794 
+
+Eigenvector: 1000_s_0.7
+NMI =  0.2166499 
+
+FastGreedy: 1000_s_0.8
+NMI =  0.103467 
+
+Louvain: 1000_s_0.8
+NMI =  0.191092 
+
+Walktrap: 1000_s_0.8
+Walktrap =  0.2485857 
+
+Eigenvector: 1000_s_0.8
+NMI =  0.08783773 
+
+FastGreedy: 1000_b_0.1
+NMI =  0.9783784 
+
+Louvain: 1000_b_0.1
+NMI =  1 
+
+Walktrap: 1000_b_0.1
+Walktrap =  1 
+
+Eigenvector: 1000_b_0.1
+NMI =  0.5406065 
+
+FastGreedy: 1000_b_0.2
+NMI =  0.9167673 
+
+Louvain: 1000_b_0.2
+NMI =  1 
+
+Walktrap: 1000_b_0.2
+Walktrap =  1 
+
+Eigenvector: 1000_b_0.2
+NMI =  0.5128045 
+
+FastGreedy: 1000_b_0.3
+NMI =  0.7351574 
+
+Louvain: 1000_b_0.3
+NMI =  1 
+
+Walktrap: 1000_b_0.3
+Walktrap =  1 
+
+Eigenvector: 1000_b_0.3
+NMI =  0.676633 
+
+FastGreedy: 1000_b_0.4
+NMI =  0.6824416 
+
+Louvain: 1000_b_0.4
+NMI =  1 
+
+Walktrap: 1000_b_0.4
+Walktrap =  1 
+
+Eigenvector: 1000_b_0.4
+NMI =  0.3879422 
+
+FastGreedy: 1000_b_0.5
+NMI =  0.5946505 
+
+Louvain: 1000_b_0.5
+NMI =  1 
+
+Walktrap: 1000_b_0.5
+Walktrap =  0.9828697 
+
+Eigenvector: 1000_b_0.5
+NMI =  0.3465192 
+
+FastGreedy: 1000_b_0.6
+NMI =  0.3285897 
+
+Louvain: 1000_b_0.6
+NMI =  0.8955764 
+
+Walktrap: 1000_b_0.6
+Walktrap =  0.8549694 
+
+Eigenvector: 1000_b_0.6
+NMI =  0.2185737 
+
+FastGreedy: 1000_b_0.7
+NMI =  0.1274687 
+
+Louvain: 1000_b_0.7
+NMI =  0.3674065 
+
+Walktrap: 1000_b_0.7
+Walktrap =  0.4142943 
+
+Eigenvector: 1000_b_0.7
+NMI =  0.1534676 
+
+FastGreedy: 1000_b_0.8
+NMI =  0.03278811 
+
+Louvain: 1000_b_0.8
+NMI =  0.07662851 
+
+Walktrap: 1000_b_0.8
+Walktrap =  0.2571663 
+
+Eigenvector: 1000_b_0.8
+NMI =  0.04874049 
+
+FastGreedy: 5000_s_0.1
+NMI =  0.9139739 
+
+Louvain: 5000_s_0.1
+NMI =  0.958651 
+
+Walktrap: 5000_s_0.1
+Walktrap =  1 
+
+Eigenvector: 5000_s_0.1
+NMI =  0.6968149 
+
+FastGreedy: 5000_s_0.2
+NMI =  0.8014626 
+
+Louvain: 5000_s_0.2
+NMI =  0.9483318 
+
+Walktrap: 5000_s_0.2
+Walktrap =  1 
+
+Eigenvector: 5000_s_0.2
+NMI =  0.5358326 
+
+FastGreedy: 5000_s_0.3
+NMI =  0.7034636 
+
+Louvain: 5000_s_0.3
+NMI =  0.9272374 
+
+Walktrap: 5000_s_0.3
+Walktrap =  1 
+
+Eigenvector: 5000_s_0.3
+NMI =  0.528449 
+
+FastGreedy: 5000_s_0.4
+NMI =  0.6642012 
+
+Louvain: 5000_s_0.4
+NMI =  0.9140819 
+
+Walktrap: 5000_s_0.4
+Walktrap =  1 
+
+Eigenvector: 5000_s_0.4
+NMI =  0.4691697 
+
+FastGreedy: 5000_s_0.5
+NMI =  0.5613935 
+
+Louvain: 5000_s_0.5
+NMI =  0.8923452 
+
+Walktrap: 5000_s_0.5
+Walktrap =  0.9833677 
+
+Eigenvector: 5000_s_0.5
+NMI =  0.3654742 
+
+FastGreedy: 5000_s_0.6
+NMI =  0.4612111 
+
+Louvain: 5000_s_0.6
+NMI =  0.8452944 
+
+Walktrap: 5000_s_0.6
+Walktrap =  0.9439672 
+
+Eigenvector: 5000_s_0.6
+NMI =  0.226173 
+
+FastGreedy: 5000_s_0.7
+NMI =  0.2305437 
+
+Louvain: 5000_s_0.7
+NMI =  0.817918 
+
+Walktrap: 5000_s_0.7
+Walktrap =  0.8032838 
+
+Eigenvector: 5000_s_0.7
+NMI =  0.1682222 
+
+FastGreedy: 5000_s_0.8
+NMI =  0.08961982 
+
+Louvain: 5000_s_0.8
+NMI =  0.2263586 
+
+Walktrap: 5000_s_0.8
+Walktrap =  0.5190907 
+
+Eigenvector: 5000_s_0.8
+NMI =  0.07239895 
+
+FastGreedy: 5000_b_0.1
+NMI =  0.9382267 
+
+Louvain: 5000_b_0.1
+NMI =  0.9943415 
+
+Walktrap: 5000_b_0.1
+Walktrap =  1 
+
+FastGreedy: 5000_b_0.2
+NMI =  0.8159503 
+
+Louvain: 5000_b_0.2
+NMI =  0.987384 
+
+Walktrap: 5000_b_0.2
+Walktrap =  1 
+
+Eigenvector: 5000_b_0.2
+NMI =  0.5769061 
+
+FastGreedy: 5000_b_0.3
+NMI =  0.6937078 
+
+Louvain: 5000_b_0.3
+NMI =  0.9785536 
+
+Walktrap: 5000_b_0.3
+Walktrap =  1 
+
+Eigenvector: 5000_b_0.3
+NMI =  0.5902934 
+
+FastGreedy: 5000_b_0.4
+NMI =  0.6863946 
+
+Louvain: 5000_b_0.4
+NMI =  0.9645378 
+
+Walktrap: 5000_b_0.4
+Walktrap =  0.9967431 
+
+Eigenvector: 5000_b_0.4
+NMI =  0.3026763 
+
+FastGreedy: 5000_b_0.5
+NMI =  0.5252698 
+
+Louvain: 5000_b_0.5
+NMI =  0.9356509 
+
+Walktrap: 5000_b_0.5
+Walktrap =  0.9978819 
+
+Eigenvector: 5000_b_0.5
+NMI =  0.31419 
+
+FastGreedy: 5000_b_0.6
+NMI =  0.3636709 
+
+Louvain: 5000_b_0.6
+NMI =  0.9258766 
+
+Walktrap: 5000_b_0.6
+Walktrap =  0.9475479 
+
+Eigenvector: 5000_b_0.6
+NMI =  0.1622763 
+
+FastGreedy: 5000_b_0.7
+NMI =  0.1775529 
+
+Louvain: 5000_b_0.7
+NMI =  0.7919577 
+
+Walktrap: 5000_b_0.7
+Walktrap =  0.6875066 
+
+Eigenvector: 5000_b_0.7
+NMI =  0.1004188 
+
+FastGreedy: 5000_b_0.8
+NMI =  0.05583727 
+
+Louvain: 5000_b_0.8
+NMI =  0.08465304 
+
+Walktrap: 5000_b_0.8
+Walktrap =  0.4784209 
+
+Eigenvector: 5000_b_0.8
+NMI =  0.05666433 
+

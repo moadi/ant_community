@@ -2,54 +2,60 @@
 \begin{figure}
 \hrule
 \BlankLine
-\label{fig2}
 \begin{algorithm}[H]
-	%\SetAlgoLined
 	\DontPrintSemicolon
 	\antsmove{$G,A$} \;
+	\Input{Graph $G$ and set of ants $A$}
+	\KwResult{Each ant attempts to change its location}
 	\Begin {
-		\For{$s=1$ \KwTo $maxSteps$}{
-		\If{$s \mod updatePeriod == 0$}{
+		\For{$s=1$ \KwTo $max\_steps$}{
+		\If{$s\mod update\_period {=}{=}0$}{
 			\update{G} \;
 		}
 		\ForEach{$a \in A$}{
-			$nAttempts \leftarrow 0$ \;
+			$num\_tries \leftarrow 0$ \;
 			$moved \leftarrow$ False \;
-			\While{not $moved$ and $nAttempts < 5$}{
+			\While{not $moved$ and $num\_tries < max\_tries$}{
 				$v_1 \leftarrow a.location$ \;
 				Select an edge $(v_1, v_2)$ at random and proportional to the
 				phermone level and the size of their neighborhood overlap \;
 				\eIf {$v_2 \notin a.tabuList$}{
 					add $v_2$ to $a.tabuList$ \;
 					$a.location \leftarrow v_2$ \;
-					$(v_1, v_2).nVisited++$ \;
+					$(v_1, v_2).num\_visited{+}{+}$ \;
 					$moved \leftarrow$ True \;
-				} {
-					$nAttempts++$ \;
+					} {
+					$num\_tries{+}{+}$ \;
+					}
 				}
 			}
 		}
 	}
-	}
 	\end{algorithm}
 
 	\BlankLine
+	\BlankLine
+	\BlankLine
+	\BlankLine
+	\BlankLine
+	\BlankLine
 
 	\begin{algorithm}[H]
-	\SetAlgoLined
 	\DontPrintSemicolon
-	\update{G}
+	\update{G}\;
+	\KwResult{Updates the pheromone level of each edge based on the number of times it has been traversed}
 	\Begin {
 		\ForEach{$e \in E$} {
-			$e.phm \leftarrow (1 - \eta) \times e.phm + e.nVisited \times   e.initPhm$ \;
-			$e.nVisited \leftarrow 0$ \;
+			$e.phm \leftarrow (1 - \eta) \times e.phm + e.num\_visited \times   e.init\_phm$ \;
+			$e.num\_visited \leftarrow 0$ \;
 		}
-		\If{$e.phm < minPhm$}{
-			$e.phm = minPhm$ \;
+		\If{$e.phm < min\_phm$}{
+			$e.phm = min\_phm$ \;
 		}
 	}
 \end{algorithm}
 \hrule
 \BlankLine
 \caption{Exploration phase}
+\label{fig2}
 \end{figure}

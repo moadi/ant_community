@@ -16,7 +16,7 @@ class Helper
 		Helper(Graph& graph)
 		{
 			seed = rd();
-			//seed = 2103890547;
+			//seed = 1486048213;//2365693151;
 			gen.seed(seed);
 			num_vertices = graph.num_vertices;
 		}

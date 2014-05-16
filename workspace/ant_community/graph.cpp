@@ -124,6 +124,8 @@ Graph::Graph(char * fileName)
 		}
 		num_edges = tot_deg/2;
 
+		//cout << "Average degree = " << (double) tot_deg / num_vertices << "\n\n";
+
 		edges.reserve(num_edges);
 
 		reset_pointer(fin);
@@ -172,9 +174,9 @@ Graph::Graph(char * fileName)
 	}
 	else
 	{
-		cout<<"Calculating number of vertices... \n";
+		//cout<<"Calculating number of vertices... \n";
 		num_vertices = count_vertices(fin); //count all vertices
-		cout<<"Done \n";
+		//cout<<"Done \n";
 
 		vertex = new Vertex[num_vertices]; //create array of vertices
 
@@ -269,6 +271,8 @@ Graph::Graph(char * fileName)
 			tot_deg += vertex[i].degree;
 		}
 		num_edges = tot_deg/2;
+
+	//	cout << "Average degree = " << (double) tot_deg / num_vertices << "\n\n";
 
 		edges.reserve(num_edges);
 
